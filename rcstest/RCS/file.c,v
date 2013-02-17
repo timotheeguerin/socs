@@ -1,0 +1,50 @@
+head	1.2;
+access;
+symbols;
+locks
+	tgueri:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2012.04.19.21.22.14;	author tgueri;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2012.04.19.21.19.34;	author tgueri;	state Exp;
+branches;
+next	;
+
+
+desc
+@Example
+@
+
+
+1.2
+log
+@New Version of this shit
+@
+text
+@#include "stdio.h"
+
+int main()
+{
+	printf("Hello shit!");
+	return 0;
+
+
+}
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@a2 2
+
+
+@

@@ -1,0 +1,77 @@
+#arg1: -o
+#arg2: name
+#arg3-6: opt
+
+function helpf
+{
+   
+    echo "---------------------HELP-----------------------"
+    echo "The syntax is of the form $ compile -o filename -clean -backup -archive -help cfilenames"
+    echo "commands: -clean   - cleans all .o files"
+    echo "          -help    - displays this message"
+    echo "          -archive - compresses all files in current directory into a TAR,"
+    echo "                     then moves this tar into a backup directory"
+    echo "          -backup  - copies all .c and .h files into your backup directory,"
+    echo "                     overwriting all files"
+    echo "          -o       - the name of the output of your compiled program"
+    echo "                     e.g. -o outputfilename"
+}
+
+function cleanf
+{
+    echo 'Currently cleaning...'
+    
+    rm -f *.o
+}
+
+function backupf
+{
+    echo 'Currently backing up...'
+    cp -f *.c backup
+    cp -f *.h backup
+}
+
+function archivef
+{  
+    echo 'Currently archiving'
+    tar -cvf ARCHIVE.tar *
+    mv -f ARCHIVE.tar backup/ARCHIVE.tar
+}
+
+#################################
+#           Main                #
+#################################
+
+
+#Check the required arguments
+if [ "$1" != "-o" -o "$2" == "" ]; then 
+    helpf
+    exit
+fi
+
+foundfile=0
+gcccmd="gcc -o $2"
+
+
+while [ "$3" != "" ]; do
+    if [ $foundfile == 0 ]; then        
+        if [ "$3" == "-help" ]; then 
+            helpf
+        elif [ "$3" == "-clean" ]; then 
+            cleanf
+        elif [ "$3" == "-backup" ]; then 
+            backupf
+        elif [ "$3" == "-archive" ]; then 
+            archivef
+        else
+            foundfile=1
+            gcccmd=$gcccmd" "$3
+        fi
+    else
+        gcccmd=$gcccmd" "$3
+        
+    fi
+    shift
+done
+
+command $gcccmd

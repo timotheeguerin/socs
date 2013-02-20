@@ -1,0 +1,4 @@
+socs
+====
+
+McGil socs repository

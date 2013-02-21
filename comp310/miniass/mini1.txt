@@ -1,0 +1,28 @@
+maini1.c: Source
+mini1.sh: Script to run mini1 and get all the value at once and disabeling randomisation.
+
+Mini1 can be run with 1 argument:
+"-stack" : find the stack value
+"-mem"   : find the memory mapping value
+none     : all other segments
+===========================
+        Values
+===========================
+Stack:
+        start:  0xbfa71a70
+        end:    0xbf2cccc0
+Memory mapping:
+        start:  0xb76e9000
+        end:    0xa7553000
+Heap segment:
+        start:  0x8049ff4
+        end:    0xf53b008
+Text segment:
+        start:  0x8048000
+        end:    0x8048976
+Data segment:
+        start:  0x8048976
+        end:    0x804a02c
+BSS segment:
+        start:  0x804a02c
+        end:    0x804a034

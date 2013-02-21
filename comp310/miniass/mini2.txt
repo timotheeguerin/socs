@@ -1,0 +1,23 @@
+Can be run with 1 or two args
+Arg1: (Optional)   
+    "-sync"   : Use sync method
+    "-nosync" : Don't
+    none: default sync
+Arg2: (Optional or Require arg1)  
+    n       : number of product producer
+    none    : default 50
+
+=====================
+No sync table:
+=====================
+N       Prod    Cons
+10      100     70     
+20      200     140
+50      500     350
+100     1000    700
+
+Here we notice its only 7 cons out of 10 produce, 
+however the result is not always the same sometimes(depend when we are running it)
+
+We resilse that the consumed element are a multiple of N all the time.
+That probably mean the consumer has not the time to consume any production of k parent.

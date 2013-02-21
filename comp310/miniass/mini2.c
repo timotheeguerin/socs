@@ -22,12 +22,12 @@ int main(int argc, char *argv[])
 	//Enable no sync mode
 	if(argc > 1)
 	{
-		if(strcmp(argv[1], "-nosync"))
+		if(!strcmp(argv[1], "-nosync"))
 		{
 			thSync = 0;
-		} else if(strcmp(argv[1], "-sync"))
+		} else if(!strcmp(argv[1], "-sync"))
 		{
-			thSync = 0;
+			thSync = 1;
 		}
 	}
 

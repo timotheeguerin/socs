@@ -19,7 +19,7 @@
 #include <stdlib.h>     /* General Utilities */
 #include <math.h>
 
-#include "mythread.h"
+#include "mythreads.h"
 
 /* prototype for thread routine */
 void handler ( );
@@ -57,7 +57,7 @@ int main()
     mythread_init();
 
     /* 250 ms */
-    set_quantum_size(5000);
+    set_quantum_size(250);
 
     counter_mutex = create_semaphore(1);
 

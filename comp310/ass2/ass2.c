@@ -68,7 +68,9 @@ int main(int argc, char *argv[])
 	// Allocate some storage .. this should go into the freed storage
 	ct = (char*)my_malloc(5*1024);
 
+
 	// First test, are you finding the available holes.
+	
 	if(ct < c[31])						
 		puts("\t\t\t\t Passed\n");
 	else
@@ -85,7 +87,6 @@ int main(int argc, char *argv[])
 			count++;
 
 	}
-
 #ifndef my_malloc
 	if (count > 0 && count < 40)
 		puts("\t\t\t\t Passed");
@@ -132,8 +133,9 @@ int main(int argc, char *argv[])
 
 	puts("Check for best first algorithm.... ");
 	my_mallopt(BEST_FIT);	
-
+	my_mallinfo();
 	char *cp3 = my_malloc(16*1024*2);
+	printf("BEST : %p,  %p\n", cp3, c[19]);
 	if (cp3 == c[19])
 		puts("\t\t\t\t Passed");
 	else

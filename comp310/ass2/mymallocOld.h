@@ -8,14 +8,11 @@
 
 #define FIRST_FIT                         1
 #define BEST_FIT                          2
-#define ALLOC_DATA_SIZE (sizeof(void**) + 2*sizeof(int*))
 
 
 typedef struct _allocation {
-	void** prev ;
-	int* size;
-	int* flag;
-	void* pointer;
+	void* pointer ;
+	int size;
 } Allocation;
 
 void* my_malloc(int size);
@@ -30,8 +27,6 @@ int getFirstFreeSpaceIndex();
 void addFreeSpace(Allocation allocation);
 void* allocFirstFreeSpaceIndex(int size);
 void* allocFitFreeSpaceIndex(int size);
-void* getPrev(void* pointer);
-Allocation getAllocation(void *pointer);
 
 void init();
 extern char *my_malloc_error;

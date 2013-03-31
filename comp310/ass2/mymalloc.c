@@ -5,19 +5,11 @@ Allocation freeSpaces[500];
 char *my_malloc_error;
 int _policy = FIRST_FIT;
 int need_init = 1;
+void* first;
 
 void init()
 {
-	int i;
-	for(i = 0; i < 500; i ++)
-	{
-		allocations[i].pointer = NULL;
-	}
-
-	for(i = 0; i < 500; i ++)
-	{
-		freeSpaces[i].pointer = NULL;
-	}
+	first = sbrk(0);
 }
 void* my_malloc(int size)
 {
@@ -35,25 +27,53 @@ void* my_malloc(int size)
 	{
 		pointer = allocFitFreeSpaceIndex(size);
 	}
-
-	if(pointer == NULL)
+	int free = 0;
+	if(pointer == sbrk(0))
 	{
-		pointer = sbrk(size);
+		sbrk(sizeof(void**));
+		sbrk(sizeof(int));
+		sbrk(sizeof(int));
+		sbrk(size);
 	}
+	else
+	{
+		free = 1;
+	}
+
+
 	if(pointer != (void *) -1)
 	{
-		int index = getFirstAllocationIndex();
-		if(index == -1)
-		{
-			my_malloc_error = "Error allocation";
+		void** prev = pointer;
+		pointer += sizeof(void**);
+		int* pSize = pointer;
+		pointer += sizeof(int*);
+		int* pFlag = pointer;
+		pointer += sizeof(int*);
 
-			return NULL;
-		}
-		else
+		//Update the free space if necssary
+		if(free)
 		{
-			allocations[index].pointer = pointer;
-			allocations[index].size = size;
+			if(*pSize != size)
+			{
+				void* next = pointer + size;
+				Allocation newAlloc = getAllocation(next);
+				*newAlloc.size = *pSize - size - ALLOC_DATA_SIZE ;
+				*newAlloc.prev = *prev;
+				*newAlloc.flag = 1;
+
+				printf("p: %p, s: %d\n", *newAlloc.prev, *newAlloc.size);
+
+				next = pointer + *pSize;
+				Allocation nextAlloc = getAllocation(next);
+				*nextAlloc.prev = newAlloc.prev;
+			}
+
 		}
+
+		//Setup values
+		*prev = getPrev(prev);
+		*pSize = size;
+		*pFlag = 0;
 
 		return pointer;
 	}
@@ -72,14 +92,48 @@ void my_free(void *ptr)
 	{
 		return;
 	}
-	int index = getAllocationIndex(ptr);
-	if(index == -1)
+	void* cur = ptr - ALLOC_DATA_SIZE;  
+	void** prev = cur;
+	cur += sizeof(void**);
+	int* pSize = cur;
+	cur += sizeof(int*);
+	int* pFlag = cur;
+	cur += sizeof(int*);
+	*pFlag = 1;
+
+	int merged = 0;
+	//Check the previous space if free
+	Allocation prevAlloc = getAllocation(*prev);
+	if(*prevAlloc.flag == 1)
 	{
-		return;
+		*prevAlloc.size += *pSize + ALLOC_DATA_SIZE;
+		merged = 1;
 	}
-	addFreeSpace(allocations[index]);
-	allocations[index].pointer = NULL;
-	allocations[index].size = 0;
+
+	void* c_next = cur + *pSize;
+	Allocation nextAlloc = getAllocation(cur + *pSize);
+
+	if(*nextAlloc.flag == 1)
+	{	
+		void** next = c_next + *nextAlloc.size;
+		if(merged)
+		{
+			*prevAlloc.size += *nextAlloc.size + ALLOC_DATA_SIZE;
+			*next = prevAlloc.prev;
+		}
+		else
+		{
+			*pSize += *nextAlloc.size +ALLOC_DATA_SIZE;
+			*next = prevAlloc.prev;
+		}
+	}
+	else
+	{
+		if(merged)
+		{
+			*nextAlloc.prev = prevAlloc.prev;
+		}
+	}
 }
 
 void my_mallopt(int policy)
@@ -94,204 +148,169 @@ void my_mallinfo()
 
 	printf("--------------------------------------\n");
 	printf("Allocated: \n");
-	int i;
-	for(i = 0; i < 500; i ++)
+	void* cur = first;
+	printf("f: %p , e: %p\n", first, sbrk(0));
+
+	for(;;)
 	{
-		if(allocations[i].pointer != NULL)
+
+		if(cur == sbrk(0))
 		{
-			printf("\t%p - %p ( %d )\n" , allocations[i].pointer, allocations[i].pointer + allocations[i].size,  allocations[i].size);
+			break;
 		}
+		void** prev = cur;
+		cur += sizeof(void**);
+		int* pSize = cur;
+		cur += sizeof(int*);
+		int* pFlag = cur;
+		cur += sizeof(int*);
+		if(*pFlag == 0)
+		{
+			printf("\t%p - %p ( %d )\n" , cur, cur + *pSize,  *pSize);
+		}
+		cur += *pSize;
+
 	}
-
-
+	cur = first;
 	printf("Free: \n");
-	for(i = 0; i < 500; i ++)
+	for(;;)
 	{
-		if(freeSpaces[i].pointer != NULL)
+
+		if(cur == sbrk(0))
 		{
-			printf("\t%p - %p ( %d )\n" , freeSpaces[i].pointer, freeSpaces[i].pointer + freeSpaces[i].size,  freeSpaces[i].size);
+			break;
 		}
+		void** prev = cur;
+		cur += sizeof(void**);
+		int* pSize = cur;
+		cur += sizeof(int*);
+		int* pFlag = cur;
+		cur += sizeof(int*);
+		if(*pFlag == 1)
+		{
+			printf("\t%p - %p ( %d )\n" , cur, cur + *pSize,  *pSize);
+		}
+		cur += *pSize;
+
 	}
 }
 
-int getFirstAllocationIndex()
-{
-	int i;
-	for(i = 0; i < 500; i ++)
-	{
-		if(allocations[i].pointer == NULL)
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-int getAllocationIndex(void* pointer)
-{
-	int i;
-	for(i = 0; i < 500; i ++)
-	{
-		if(allocations[i].pointer == pointer)
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-int getFirstFreeSpaceIndex()
-{
-	int i;
-	for(i = 0; i < 500; i ++)
-	{
-		if(freeSpaces[i].pointer == NULL)
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-void addFreeSpace(Allocation allocation)
-{
-	int merged = -1;
-	int i;
-	for(i = 0; i < 500; i ++)
-	{
-		if(freeSpaces[i].pointer != NULL)
-		{
-			void* end = freeSpaces[i].pointer + freeSpaces[i].size;
-			void* allocEnd = allocation.pointer + allocation.size;
-
-			//Check if the free memory end match the begining of the new free alloc  FFFFFFNNNNN
-			if(end == allocation.pointer)
-			{
-				//Check if we already merge the freed allocation with a previously free allocation(Before)
-				if(merged == -1)
-				{
-					freeSpaces[i].size += allocation.size;
-					merged = i;
-				}
-				else
-				{
-					freeSpaces[i].size += freeSpaces[merged].size;
-					freeSpaces[merged].pointer  = NULL;
-					freeSpaces[merged].size = 0;
-					return;
-				}
-			}
-			//Check if the free memory start match the begining of the new free alloc end  NNNNFFFFFF
-			if(freeSpaces[i].pointer == allocEnd)
-			{
-				//Check if we already merge the freed allocation with a previously free allocation(After)
-				if(merged == -1)
-				{
-					freeSpaces[i].size += allocation.size;
-					freeSpaces[i].pointer -= allocation.size;
-					merged = i;
-				}
-				else
-				{
-					freeSpaces[merged].size += freeSpaces[i].size;
-					freeSpaces[i].pointer  = NULL;
-					freeSpaces[i].size = 0;
-					return;
-				}
-			}
-		}
-	}
-	//If we already merged don't add again
-	if(merged != -1)
-	{
-		return;
-	}
-	int index  = getFirstFreeSpaceIndex();
-	if(index != -1)
-	{
-		freeSpaces[index].pointer = allocation.pointer;
-		freeSpaces[index].size = allocation.size;
-	}
-}
 
 void* allocFirstFreeSpaceIndex(int size)
 {
-	int best  = -1;
-	int i;
-	for(i = 0; i < 500; i ++)
+	void* cur = first;
+	for(;;)
 	{
-		if(freeSpaces[i].pointer != NULL)
+		if(cur == sbrk(0))
 		{
-			if(size <= freeSpaces[i].size)
-			{
-				if(best == -1)
-				{
-					best = i;
-				}
-				else
-				{
-					if(freeSpaces[i].pointer < freeSpaces[best].pointer)
-					{
-						best  = i;
-					}
-				}
-			}
+			return cur;
 		}
+		void** prev = cur;
+		cur += sizeof(void**);
+		int* pSize = cur;
+		cur += sizeof(int*);
+		int* pFlag = cur;
+		cur += sizeof(int*);
+		if(*pFlag == 1 && *pSize >= size)
+		{
+			return prev;
+		}
+		cur += *pSize;
 	}
-	if(best == -1)
-	{
-		return NULL;
-	}
-	void* pointer = freeSpaces[best].pointer;
-	freeSpaces[best].size -= size;
-	if(size == freeSpaces[i].size)
-	{
-		freeSpaces[best].pointer = NULL;
-	}
-	else
-	{
-		freeSpaces[best].pointer += size;
-	}
-	return pointer;
 }
 
 void* allocFitFreeSpaceIndex(int size)
 {
-	int best  = -1;
-	int i;
-	for(i = 0; i < 500; i ++)
+	void* best  = sbrk(0);
+	int bestSize = -1;
+
+	void* cur = first;
+	for(;;)
 	{
-		if(freeSpaces[i].pointer != NULL)
+		if(cur == sbrk(0))
 		{
-			if(size <= freeSpaces[i].size)
-			{
-				if(best == -1)
-				{
-					best = i;
-				}
-				else
-				{
-					if(freeSpaces[i].size < freeSpaces[best].size)
-					{
-						best  = i;
-					}
-				}
-			}
+			break;
 		}
+		Allocation alloc = getAllocation(cur);
+	
+		if(*alloc.flag == 1 && *alloc.size >= size)
+		{
+			printf("\t best :  p:%p f: %d s: %d, b: %d\n" , alloc.prev, *alloc.flag, *alloc.size, bestSize);
+			if(bestSize == -1)
+			{
+				best = alloc.prev;
+				bestSize = *alloc.size;
+			}
+
+			if(*alloc.size < bestSize)
+			{
+				best = alloc.prev;
+				bestSize = *alloc.size;
+			}
+
+		}
+		cur += ALLOC_DATA_SIZE + *alloc.size;
 	}
-	if(best == -1)
-	{
-		return NULL;
-	}
-	void* pointer = freeSpaces[best].pointer;
-	freeSpaces[best].size -= size;
-	if(size == freeSpaces[i].size)
-	{
-		freeSpaces[best].pointer = NULL;
-	}
-	else
-	{
-		freeSpaces[best].pointer += size;
-	}
-	return pointer;
+	return best;
 }
+
+void* getPrev(void* pointer)
+{
+	void* cur = first;
+
+	for(;;)
+	{
+
+		if(cur == sbrk(0) || cur == pointer)
+		{
+			break;
+		}
+		void** prev = cur;
+		cur += sizeof(void**);
+		int* pSize = cur;
+		cur += sizeof(int*);
+		int* pFlag = cur;
+		cur += sizeof(int*);
+
+		if(cur + *pSize == pointer) 
+		{
+			return prev;
+		}
+		cur += *pSize;
+	}
+	return first;
+}
+
+Allocation getAllocation(void *pointer)
+{
+	void* cur = pointer;
+	Allocation allocation;
+	allocation.prev = cur;
+	cur += sizeof(void**);
+	allocation.size = cur;
+	cur += sizeof(int*);
+	allocation.flag = cur;
+	cur += sizeof(int*);
+	allocation.pointer = cur;
+	return allocation;
+}
+/*
+int main()
+{
+
+	my_malloc(1024);
+	void* ptr1 = my_malloc(1024);
+	void* ptr2 = my_malloc(1024);
+	void* ptr3 = my_malloc(1024);
+	my_malloc(1024);
+	my_mallinfo();
+	my_free(ptr1);
+	my_free(ptr3);
+	my_mallinfo();
+	my_free(ptr2);
+	my_mallinfo();
+
+	void* ptr4 = my_malloc(1024);
+	my_mallinfo();
+	return 0;
+}*/

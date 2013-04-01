@@ -133,9 +133,8 @@ int main(int argc, char *argv[])
 
 	puts("Check for best first algorithm.... ");
 	my_mallopt(BEST_FIT);	
-	my_mallinfo();
+	
 	char *cp3 = my_malloc(16*1024*2);
-	printf("BEST : %p,  %p\n", cp3, c[19]);
 	if (cp3 == c[19])
 		puts("\t\t\t\t Passed");
 	else

@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define FIRST_FIT                         1
-#define BEST_FIT                          2
+#define FIRST_FIT 1
+#define BEST_FIT  2
 #define ALLOC_DATA_SIZE (sizeof(void**) + 2*sizeof(int*))
 
 
@@ -24,20 +24,12 @@ void my_mallopt(int policy);
 void my_mallinfo();
 
 //Helper functions
-int getFirstAllocationIndex();
-int getAllocationIndex(void* pointer);
-int getFirstFreeSpaceIndex();
-void addFreeSpace(Allocation allocation);
 void* allocFirstFreeSpaceIndex(int size);
 void* allocFitFreeSpaceIndex(int size);
 void* getPrev(void* pointer);
 Allocation getAllocation(void *pointer);
 
 void init();
-extern char *my_malloc_error;
-
-extern Allocation allocations[500];
-extern Allocation freeSpaces[500];
 
 extern char *my_malloc_error;
 extern int _policy;

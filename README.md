@@ -1,4 +1,4 @@
-socs
+Socs
 ====
 
-McGil socs repository
+McGill socs repository

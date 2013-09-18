@@ -1,0 +1,2 @@
+fun self (x) is self end ;
+

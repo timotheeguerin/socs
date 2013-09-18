@@ -1,0 +1,22 @@
+let 
+ ifun = fun ident(x : int) : int is x end in 
+let 
+ t1 = fun test(x : int) : int is x + 3 end in
+let
+ t2 = fun test (x : int) : int is if x = 0 then 1 else test(x-1) fi end in
+let
+  t3 = fun test (x:int) : int is 
+         let x = ~x in if x < 0 then 2 else 5 fi end end in
+let
+  t4 = fun test (x:int) : int is 
+         let y = x in 
+         let x = true in 
+           if x then y else 5 fi 
+         end end end  in
+t1 (ifun 4)
+end end end end end;
+
+
+
+
+

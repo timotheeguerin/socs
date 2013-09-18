@@ -1,0 +1,78 @@
+# depslib dependency file v1.0
+1332699078 source:g:\mcgill\comp\comp 322\ass4\ratinginformation.cc
+
+1334262746 source:g:\mcgill\comp\comp 322\ass4\recommender.cc
+	"Recommender.h"
+
+1334262148 g:\mcgill\comp\comp 322\ass4\recommender.h
+	<iostream>
+	<string>
+	<vector>
+	<list>
+	<fstream>
+	<algorithm>
+	<sstream>
+	"RatingInformation.cc"
+	"MovieInformation.h"
+
+1332699078 g:\mcgill\comp\comp 322\ass4\ratinginformation.cc
+
+1333840783 g:\mcgill\comp\comp 322\ass4\movieinformation.h
+	<string>
+
+1334263576 source:g:\mcgill\comp\comp 322\ass4\simplerecommender.cc
+	"SimpleRecommender.h"
+
+1332699246 g:\mcgill\comp\comp 322\ass4\simplerecommender.h
+	<string>
+	<vector>
+	<list>
+	"SimpleRecommender.h"
+	"RatingInformation.cc"
+	"MovieInformation.h"
+	"Recommender.h"
+
+1334267829 source:g:\mcgill\comp\comp 322\ass4\collaborativerecommender.cc
+	"CollaborativeRecommender.h"
+
+1334262157 g:\mcgill\comp\comp 322\ass4\collaborativerecommender.h
+	<iostream>
+	<string>
+	<vector>
+	<list>
+	<algorithm>
+	"SimpleRecommender.h"
+	"RatingInformation.cc"
+	"MovieInformation.h"
+	"Recommender.h"
+
+1334260451 source:g:\mcgill\comp\comp 322\ass4\recommenderprogram.cc
+	<iostream>
+	"SimpleRecommender.h"
+	"CollaborativeRecommender.h"
+	"ReviewCollection.h"
+	<sstream>
+
+1334256112 source:g:\mcgill\comp\comp 322\ass4\reviewcollection.cc
+	"ReviewCollection.h"
+
+1333853212 g:\mcgill\comp\comp 322\ass4\reviewcollection.h
+	<vector>
+	<string>
+	"ReviewCollectionIterator.h"
+	<fstream>
+	<sstream>
+	<iostream>
+
+1333855213 g:\mcgill\comp\comp 322\ass4\reviewcollectioniterator.h
+	<vector>
+	<string>
+	<iostream>
+
+1333937483 source:g:\mcgill\comp\comp 322\ass4\reviewcollectioniterator.cc
+	"ReviewCollectionIterator.h"
+
+1333840820 source:g:\mcgill\comp\comp 322\ass4\movieinformation.cc
+	"MovieInformation.h"
+	"MovieInformation.h"
+

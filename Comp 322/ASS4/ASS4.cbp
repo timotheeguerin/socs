@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ASS4" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\ASS4" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\ASS4" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="CollaborativeRecommender.cc" />
+		<Unit filename="CollaborativeRecommender.h" />
+		<Unit filename="MovieInformation.cc" />
+		<Unit filename="MovieInformation.h" />
+		<Unit filename="RatingInformation.cc" />
+		<Unit filename="Recommender.cc" />
+		<Unit filename="Recommender.h" />
+		<Unit filename="RecommenderProgram.cc" />
+		<Unit filename="ReviewCollection.cc" />
+		<Unit filename="ReviewCollection.h" />
+		<Unit filename="ReviewCollectionIterator.cc" />
+		<Unit filename="ReviewCollectionIterator.h" />
+		<Unit filename="SimpleRecommender.cc" />
+		<Unit filename="SimpleRecommender.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

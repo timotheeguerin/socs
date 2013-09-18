@@ -1,0 +1,3 @@
+
+fun this_should_not_typecheck (x : int) : int is this_should_not_typecheck end ;
+

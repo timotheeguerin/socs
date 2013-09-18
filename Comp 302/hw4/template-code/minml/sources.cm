@@ -1,0 +1,37 @@
+Group 
+    signature GLOBAL
+    signature MINML
+    signature INPUT
+    signature LEXER
+    signature PARSE
+    signature LOOP
+    signature TOP
+    signature CONV
+
+    structure Global
+    structure MinML
+    structure DeBruijn
+    structure Convert
+
+    structure Input
+    structure Lexer
+    structure Parse
+    structure Loop
+    structure Top
+is
+#if defined(NEW_CM)
+   $/basis.cm
+#endif
+  
+  global.sml
+  var.sml
+  minml.sml
+  convert.sml
+  input.sml
+  stream.sml
+  lexer.sml
+  parse.sml
+  loop.sml
+  top.sml
+
+

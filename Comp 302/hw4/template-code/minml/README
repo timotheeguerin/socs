@@ -1,0 +1,18 @@
+To read and print expressions you can use the following functions defined in
+top.sml
+
+(* interactive loop *)
+val loop_print           : unit -> unit   (* read in a string and  prints it back)
+val loop_print_deBruijn  : unit -> unit   (* read in an expression, converts it
+                                             to deBruijn representation and
+					     prints it back *)
+val loop_print_closed    : unit -> unit   (* read in a string, check that it
+                                             does not contain any free variables and print it back *)
+val loop_print_deBruijn_closed : unit -> unit
+                                           (* read in a string, convert it to
+					   deBruijn and check that the resulting
+					   term is closed *)
+
+(* read a MinML source file *)
+val file_print          : string -> unit
+val file_print_deBruijn : string -> unit

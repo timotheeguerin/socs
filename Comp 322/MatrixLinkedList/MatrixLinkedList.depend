@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1328557846 source:g:\cpp\comp322\matrixlinkedlist\matrixlinkedlist.cc
+	"MatrixLinkedList.h"
+
+1327862517 g:\cpp\comp322\matrixlinkedlist\matrixlinkedlist.h
+	<iostream>
+

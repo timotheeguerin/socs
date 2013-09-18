@@ -1,0 +1,24 @@
+
+fun hlet(p : int -> int -> (int -> int -> int) -> int) : int is
+    fun hlet(proj1 : int -> int -> int) : int is
+        fun hlet(proj2 : int -> int -> int) : int is
+			   (p (p 10 20 proj1) (p 1 2 proj2) proj1) -
+				  (p  5  3 proj2)
+        end (fun proj2 ( x1 : int ) : int -> int is
+			        fun proj2 ( x2 : int ) : int is
+					      x2
+				 	  end
+			    end)
+    end (fun proj1 ( x1 : int ) : int -> int is
+			    fun proj1 ( x2 : int ) : int is
+					  x1
+				 end
+			end)
+end (fun p ( x1 : int ) : int ->(int -> int -> int) -> int is
+         fun p ( x2 : int ) : (int -> int -> int) -> int is
+				 fun p ( which : int -> int -> int ) : int is
+					  which x1 x2
+             end
+		   end
+	  end);
+

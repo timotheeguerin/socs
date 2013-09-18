@@ -1,0 +1,34 @@
+# depslib dependency file v1.0
+1331564750 source:g:\mcgill\comp\comp 322\ass3\simplerecommender.cpp
+	"SimpleRecommender.h"
+
+1332464869 g:\mcgill\comp\comp 322\ass3\simplerecommender.h
+	<string>
+	<list>
+	<vector>
+	<map>
+	<algorithm>
+	<fstream>
+	<iostream>
+	"RatingInformation.h"
+	"MovieInformation.h"
+
+1331565018 g:\mcgill\comp\comp 322\ass3\ratinginformation.h
+
+1332174359 g:\mcgill\comp\comp 322\ass3\movieinformation.h
+	<string>
+
+1332174341 source:g:\mcgill\comp\comp 322\ass3\movieinformation.cc
+	"MovieInformation.h"
+
+1332464754 source:g:\mcgill\comp\comp 322\ass3\simplerecommender.cc
+	"SimpleRecommender.h"
+
+1332171630 source:g:\mcgill\comp\comp 322\ass3\main.cc
+	<iostream>
+	"SimpleRecommender.h"
+
+1332464827 source:g:\mcgill\comp\comp 322\ass3\ recommendationprogram.cc
+	<iostream>
+	"SimpleRecommender.h"
+

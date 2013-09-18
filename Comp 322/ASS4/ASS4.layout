@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="CollaborativeRecommender.cc" open="1" top="0" tabpos="8">
+		<Cursor position="3735" topLine="104" />
+	</File>
+	<File name="CollaborativeRecommender.h" open="1" top="0" tabpos="7">
+		<Cursor position="35" topLine="0" />
+	</File>
+	<File name="MovieInformation.cc" open="1" top="0" tabpos="14">
+		<Cursor position="376" topLine="0" />
+	</File>
+	<File name="MovieInformation.h" open="1" top="0" tabpos="1">
+		<Cursor position="48" topLine="0" />
+	</File>
+	<File name="RatingInformation.cc" open="1" top="0" tabpos="3">
+		<Cursor position="114" topLine="0" />
+	</File>
+	<File name="Recommender.cc" open="1" top="0" tabpos="5">
+		<Cursor position="142" topLine="84" />
+	</File>
+	<File name="Recommender.h" open="1" top="0" tabpos="4">
+		<Cursor position="287" topLine="16" />
+	</File>
+	<File name="RecommenderProgram.cc" open="1" top="0" tabpos="9">
+		<Cursor position="405" topLine="0" />
+	</File>
+	<File name="ReviewCollection.cc" open="1" top="0" tabpos="11">
+		<Cursor position="666" topLine="0" />
+	</File>
+	<File name="ReviewCollection.h" open="1" top="1" tabpos="10">
+		<Cursor position="162" topLine="0" />
+	</File>
+	<File name="ReviewCollectionIterator.cc" open="1" top="0" tabpos="13">
+		<Cursor position="1960" topLine="3" />
+	</File>
+	<File name="ReviewCollectionIterator.h" open="1" top="0" tabpos="12">
+		<Cursor position="1132" topLine="0" />
+	</File>
+	<File name="SimpleRecommender.cc" open="1" top="0" tabpos="6">
+		<Cursor position="513" topLine="0" />
+	</File>
+	<File name="SimpleRecommender.h" open="1" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

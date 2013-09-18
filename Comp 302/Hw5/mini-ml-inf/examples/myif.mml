@@ -1,0 +1,5 @@
+let 
+  t = fun test (x) is x + 3 end
+in
+ if (t 2) = 3 then (t 3) else (t 5) fi
+end;

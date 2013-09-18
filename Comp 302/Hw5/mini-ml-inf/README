@@ -1,0 +1,25 @@
+To run the code : 
+
+Start a SML interpreter, and type: 
+  CM.make "sources.cm";
+
+This will compiler your code.
+
+
+We provide three top-level functions to pretty print expressions, evaluate expressions and verify that they are closed. 
+
+Top.file_print "<path-to-file>";
+
+  Pretty prints the expression in the file <path-to-file>
+
+Top.file_eval "<path-to-file>";
+
+  Evaluates the expression in the file <path-to-file> to a value.
+
+
+Top.file_type "<path-to-file>";
+
+  Infers the type of the expression in the file <path-to-file>.
+
+
+

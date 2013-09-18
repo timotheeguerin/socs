@@ -1,0 +1,10 @@
+if 1=1 then
+ if (if 1=2 then false
+   else true
+   fi)
+ then 1
+ else 2
+ fi
+else
+ 3
+fi;

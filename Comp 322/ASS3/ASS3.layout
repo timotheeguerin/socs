@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name=" RecommendationProgram.cc" open="1" top="0" tabpos="6">
+		<Cursor position="383" topLine="0" />
+	</File>
+	<File name="MovieInformation.cc" open="1" top="0" tabpos="2">
+		<Cursor position="93" topLine="0" />
+	</File>
+	<File name="MovieInformation.h" open="1" top="0" tabpos="1">
+		<Cursor position="419" topLine="0" />
+	</File>
+	<File name="RatingInformation.h" open="1" top="0" tabpos="5">
+		<Cursor position="76" topLine="0" />
+	</File>
+	<File name="SimpleRecommender.cc" open="1" top="0" tabpos="4">
+		<Cursor position="2004" topLine="79" />
+	</File>
+	<File name="SimpleRecommender.h" open="1" top="1" tabpos="3">
+		<Cursor position="632" topLine="5" />
+	</File>
+</CodeBlocks_layout_file>

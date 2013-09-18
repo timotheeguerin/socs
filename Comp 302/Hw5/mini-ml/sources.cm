@@ -1,0 +1,16 @@
+Group is
+#if defined(NEW_CM)
+  $/basis.cm
+#endif
+
+
+    stream.sml
+    input.sml
+    lexer.sml
+    minml.sml
+    parse.sml
+    print.sml
+    typing.sml
+    eval.sml 
+    loop.sml
+    top.sml

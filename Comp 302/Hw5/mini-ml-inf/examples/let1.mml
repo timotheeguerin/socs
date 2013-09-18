@@ -1,0 +1,9 @@
+let
+  x=true
+in
+  let
+    x=1
+  in
+    x+5
+  end
+end;

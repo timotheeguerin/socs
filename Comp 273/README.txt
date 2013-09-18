@@ -1,0 +1,17 @@
+		1	2	4	8
+Q1:	   8:	87	97	97	97
+	  64:	98	98	98	98
+
+		1	2	4	8
+Q2:	   8:	100	100	100	100
+ 	  64:	100	100	100	100
+
+
+
+Question 3:
+
+The recusrsive method use a lot of memory compare to the iterative one
+Just to save the register in the stack, the recursive method use n-time more memory(where n is number of time the recusrion is called).
+Its logic that the cache will have more miss as we are trying to store more stuff.
+By increasing the size of the cache block we can reduce the misses.
+The use of associative mapping reduce also the amount of miss.( As 1-way is similar to direct-cache)

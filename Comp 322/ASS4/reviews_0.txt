@@ -1,0 +1,10 @@
+5   this is the bomb!
+-5  this movie was awful.
+-2  not so good
+10  incredible!
+9   pretty good!
+1   amazing!
+-100    Downright terrible
+-500    hideously awful
+-100    the worst movie i've seen in my life
+-1000   terrible

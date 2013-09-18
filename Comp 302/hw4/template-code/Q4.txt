@@ -1,0 +1,46 @@
+q4
+
+Recursion
+
+Recursive functions are functions that call themselves
+Mutually recursive functions are two or more functions that call each other
+
+For instance:
+
+fun fact(n) = if n=0 then 1
+                    else n*fact(n-1)
+                    
+fun expo(x,n) = if n=0 then 1
+                    else x*expo(x(n-1)
+                   
+fun fibo(n)= if n=1 then 1
+                    else if n=2 then 1
+                    else fibo(n-1) + fibo(n-2)
+                    
+
+Tail recursive functions are functions that have nothing to do after the function returns except return its value
+
+For instance:
+
+fun factt(n, result) = if n=0 then result
+                            else factt(x-1,x*result)
+                            
+fun expot(x,n,result) = if n=0 then result
+                            else expot(x,n-1,x*result)
+                            
+fun fibot(n,result,result2) = if n=1 then result+result2
+                            else fibot(n-1,result,result+result2)
+                            
+What if we don't want to hide the second parameter
+
+fun facthide(n) = factt(n,1)
+fun expohide(x,n) = expot(x,n,1)
+fun fibohide(n) = fibot(n,0,1)
+
+or we could use let / in / end
+
+fun facthide(n) = let  
+                    fun fact1(n,result) =...
+                  in
+                    factt(n,1)
+                  end

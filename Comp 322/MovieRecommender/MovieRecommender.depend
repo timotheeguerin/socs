@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1330705737 source:g:\mcgill\comp\comp 322\movierecommender\movierecommender.cc
+	<iostream>
+	"MovieRecommender.h"
+
+1330705703 g:\mcgill\comp\comp 322\movierecommender\movierecommender.h
+	<list>
+	<vector>
+	<fstream>
+	<algorithm>
+	<functional>
+

@@ -1,0 +1,11 @@
+fun ident(x : int) : int is x end;
+
+let 
+ y = fun ident(x : int) : int is x end in 
+y 3 
+end;
+
+
+
+
+

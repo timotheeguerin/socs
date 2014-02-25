@@ -1,0 +1,23 @@
+<POLITICIANS>
+
+	<POLITICIAN pname = "Coderre" website = http://www.equipedeniscoderre.com friend = "Mulcair">
+		<CURRENTMAYOR>
+		<CITY>Montreal</CITY>
+		</CURRENTMAYOR>
+	</POLITICIAN>
+
+	<POLITICIAN pname = "Mulcair" website = " http://thomasmulcair.ndp.ca/" friend = "Coderre">
+		<CURRENTMOP>
+		<RIDING>Montreal Outremont</RIDING>
+		</CURRENTMOP>
+	</POLITICIAN>
+
+	<CITY  name = "Montreal" population = "1.6 Mio">
+		<PROVINCE>Quebec</PROVINCE>
+	</CITY>
+
+	<RIDING rname = "Montreal Outremont" population = "98,000">
+		<PROVINCE>Quebec</PROVINCE>
+	</RIDING>
+
+</POLITICIANS>

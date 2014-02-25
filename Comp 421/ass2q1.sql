@@ -1,4 +1,4 @@
-﻿-- 1
+-- 1
 SELECT DISTINCT id FROM "Games" WHERE abs(goals1-goals2) >= 4 ORDER BY id;
 
 -- 2
@@ -7,6 +7,7 @@ SELECT DISTINCT round FROM "Series" s JOIN "Games" g ON s.id = g.id WHERE ot=1;
 -- 3
 SELECT DISTINCT id FROM "Series" 
 EXCEPT SELECT s.id FROM "Series" s JOIN "Games" g ON s.id = g.id WHERE ot=1;
+
 
 -- 4
 SELECT DISTINCT g.id FROM "Games" g

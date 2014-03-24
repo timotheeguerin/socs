@@ -1,0 +1,195 @@
+// SIGN UP, FIND BY NAME AND RATE
+
+Welcome to to best cooking website in the world!
+================================================
+
+What do you want to do?
+1.	Signin
+2.	Sign up
+3.	Quit
+Choice: 2
+
+================================================
+	 SIGN UP
+================================================
+Email: vincent@mail.com
+Password: iamthebest
+
+
+
+================================================
+Welcome back user 8
+================================================
+
+What do you want to do?
+1.	Search by recipe name
+2.	Search by ingredients
+3.	Our most rated recipes
+4.	My recipes
+5.	Quit
+Choice: 1
+================================================
+	 Search recipe by name
+================================================
+salm
+
+What do you want to do?
+1.	Salmon bagel
+2.	Salmon pasta
+Choice: 2
+
+================================================
+	Salmon pasta
+================================================
+Preparation time    : 00:10:00
+Cooking time        : 00:15:00
+Cook pasta, add cream, sliced salmon, fish eggs and sliced green onions
+
+What do you want to do?
+1.	Rate this recipe
+2.	Back to menu
+Choice: 1
+
+================================================
+	 Rate Salmon pasta
+================================================
+
+What do you want to do?
+1.	Like
+2.	Dislike
+Choice: 2
+Recipe rated!
+================================================
+
+What do you want to do?
+1.	Search by recipe name
+2.	Search by ingredients
+3.	Our most rated recipes
+4.	My recipes
+5.	Quit
+Choice: 5
+Why do you leave us!
+
+// dsssssssssssssssssssssssss
+
+Welcome to to best cooking website in the world!
+================================================
+
+What do you want to do?
+1.	Signin
+2.	Sign up
+3.	Quit
+Choice: 1
+
+================================================
+	 LOGIN
+================================================
+Email: lol@lool.fr
+Password: abc
+
+
+
+================================================
+Welcome back user 2
+================================================
+
+What do you want to do?
+1.	Search by recipe name
+2.	Search by ingredients
+3.	Our most rated recipes
+4.	My recipes
+5.	Quit
+Choice: 2
+================================================
+	 Search recipe by ingredients
+================================================
+ham
+
+What do you want to do?
+1.	Asparagus & Ham
+Choice: 1
+
+================================================
+	Asparagus & Ham
+================================================
+Preparation time    : 00:20:00
+Cooking time        : 00:15:00
+Wrap the asparagus with ham, add cream & cheese and put in the oven
+
+What do you want to do?
+1.	Rate this recipe
+2.	Back to menu
+Choice: 2
+================================================
+
+What do you want to do?
+1.	Search by recipe name
+2.	Search by ingredients
+3.	Our most rated recipes
+4.	My recipes
+5.	Quit
+Choice: 3
+
+What do you want to do?
+1.	Exotic Salad
+2.	Asparagus & Ham
+3.	Apple Pie
+Choice: 3
+
+================================================
+	Apple Pie
+================================================
+Preparation time    : 00:10:00
+Cooking time        : 00:30:00
+Cut an apple and put it on the puff pastry then insert into oven
+
+What do you want to do?
+1.	Rate this recipe
+2.	Back to menu
+Choice: 2
+================================================
+
+What do you want to do?
+1.	Signin
+2.	Sign up
+3.	Quit
+Choice: 1
+
+================================================
+	 LOGIN
+================================================
+
+What do you want to do?
+1.	Search by recipe name
+2.	Search by ingredients
+3.	Our most rated recipes
+4.	My recipes
+5.	Quit
+Choice: 4
+
+What do you want to do?
+1.	Hamburger
+2.	Potatoe gratin
+Choice: 1
+
+================================================
+	Hamburger
+================================================
+Preparation time    : 00:05:00
+Cooking time        : 00:03:00
+Make the patty, toast the bread
+
+What do you want to do?
+1.	Rate this recipe
+2.	Back to menu
+Choice: 2
+================================================
+
+What do you want to do?
+1.	Search by recipe name
+2.	Search by ingredients
+3.	Our most rated recipes
+4.	My recipes
+5.	Quit
+Choice: 5
+Why do you leave us!

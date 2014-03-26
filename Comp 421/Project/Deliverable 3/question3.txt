@@ -1,35 +1,34 @@
+mysql> SELECT * FROM user_recommended_recipe;
++---------+-----------+
+| user_id | recipe_id |
++---------+-----------+
+|       1 |         1 |
+|       2 |         1 |
+|       1 |         2 |
+|       2 |         2 |
+|       1 |         5 |
+|       2 |         5 |
++---------+-----------+
+6 rows in set (0.00 sec)
 
-mysql> SELECT * FROM user u WHERE u.id in
-    -> (SELECT id FROM (SELECT u0.id, EXTRACTVALUE(info,'/profile/sexe') as sexe, EXTRACTVALUE(info,'/profile/timezone') as timezone FROM user u0) as get_sexe
-    -> WHERE sexe = 'F' AND timezone = '+1');
-+----+-----------------+----------+-----------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| id | email           | password | guidemode | level_id | info                                                                                                                                                                                                                                                          |
-+----+-----------------+----------+-----------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|  3 | icook@apple.com | apple    |         0 |        1 |
-<profile>
-        <name>
-                <firstname>Wendy</firstname>
-                <lastname>Pan</lastname>
-        </name>
-        <age>7</age>
-        <sexe>F</sexe>
-        <timezone>+1</timezone>
-        <description>Hello world, my name is wendy and I love baking.</description>
-</profile>
-                         |
-|  7 | allo@aluile.com | allo     |         0 |        4 |
-<profile>
-        <name>
-                <firstname>Francois</firstname>
-                <lastname>Hollande</lastname>
-        </name>
-        <age>72</age>
-        <sexe>F</sexe>
-        <timezone>+1</timezone>
-        <description>Hello my name is Francois and I need help to learn how to cook.</description>
-</profile>
- |
-+----+-----------------+----------+-----------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-2 rows in set (0.00 sec)
+mysql> SELECT * FROM user_recommended_recipe;
+Empty set (0.01 sec)
 
-mysql>
+mysql> CALL prc_calculate_recommendation(0);
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+
+mysql> SELECT * FROM user_recommended_recipe;
++---------+-----------+
+| user_id | recipe_id |
++---------+-----------+
+|       1 |         1 |
+|       2 |         1 |
+|       1 |         2 |
+|       2 |         2 |
+|       1 |         5 |
+|       2 |         5 |
++---------+-----------+
+6 rows in set (0.00 sec)
+
+
+//Only user 1 and 2 have rating now as they are the only one who liked ingredients and are at guidemode=0

@@ -1,0 +1,148 @@
+
+
+mysql> describe level;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| id             | int(11)     | NO   | PRI | NULL    |       |
+| name           | varchar(45) | NO   |     | NULL    |       |
+| point_required | int(11)     | YES  |     | 0       |       |
++----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe user;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int(11)     | NO   | PRI | NULL    |       |
+| email     | varchar(45) | NO   |     | NULL    |       |
+| password  | varchar(45) | NO   |     | NULL    |       |
+| guidemode | tinyint(4)  | YES  |     | 0       |       |
+| level_id  | int(11)     | NO   | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> describe equipement;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(11)     | NO   | PRI | NULL    |       |
+| name  | varchar(45) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> describe recipe_type;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(11)     | NO   | PRI | NULL    |       |
+| name  | varchar(45) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> describe ingredient;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | NO   | PRI | NULL    |       |
+| name    | varchar(45) | NO   |     | NULL    |       |
+| isbasic | tinyint(4)  | YES  |     | 0       |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe unit;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| id     | int(11)     | NO   | PRI | NULL    |       |
+| name   | varchar(45) | NO   |     | NULL    |       |
+| symbol | varchar(5)  | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe unit_conversion;
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| id      | int(11) | NO   | PRI | NULL    |       |
+| from_id | int(11) | NO   | MUL | NULL    |       |
+| to_id   | int(11) | NO   | MUL | NULL    |       |
+| a       | float   | NO   |     | NULL    |       |
+| b       | float   | NO   |     | NULL    |       |
++---------+---------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> describe recipe;
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| id               | int(11)      | NO   | PRI | NULL    |       |
+| name             | varchar(255) | NO   |     | NULL    |       |
+| preparation_time | time         | NO   |     | NULL    |       |
+| cooking_time     | time         | NO   |     | NULL    |       |
+| preparation      | text         | NO   |     | NULL    |       |
+| rating           | int(11)      | NO   |     | NULL    |       |
+| point_required   | int(11)      | NO   |     | NULL    |       |
+| type_id          | int(11)      | NO   | MUL | NULL    |       |
+| user_id          | int(11)      | NO   | MUL | NULL    |       |
++------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> describe recipe_ingredient;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| recipe_id     | int(11) | NO   | PRI | NULL    |       |
+| ingredient_id | int(11) | NO   | PRI | NULL    |       |
+| unit_id       | int(11) | NO   | MUL | NULL    |       |
+| quantity      | float   | NO   |     | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> describe user_recipe_rating;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| rating    | int(11) | NO   |     | NULL    |       |
+| user_id   | int(11) | NO   | PRI | NULL    |       |
+| recipe_id | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe user_equipement;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| user_id       | int(11) | NO   | PRI | NULL    |       |
+| equipement_id | int(11) | NO   | PRI | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> describe user_recommended_recipe;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| user_id   | int(11) | NO   | PRI | NULL    |       |
+| recipe_id | int(11) | NO   | PRI | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> describe user_like_ingredient;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| user_id       | int(11) | NO   | PRI | NULL    |       |
+| ingredient_id | int(11) | NO   | PRI | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> describe recipe_equipement;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| recipe_id     | int(11) | NO   | PRI | NULL    |       |
+| equipement_id | int(11) | NO   | PRI | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+

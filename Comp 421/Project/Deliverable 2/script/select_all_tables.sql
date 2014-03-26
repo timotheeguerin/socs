@@ -1,0 +1,14 @@
+SELECT * FROM `equipement` LIMIT 10;
+SELECT * FROM `ingredient` LIMIT 10;
+SELECT * FROM `level` LIMIT 10;
+SELECT * FROM `recipe` LIMIT 10;
+SELECT * FROM `recipe_equipement` LIMIT 10;
+SELECT * FROM `recipe_ingredient` LIMIT 10;
+SELECT * FROM `recipe_type` LIMIT 10;
+SELECT * FROM `unit` LIMIT 10;
+SELECT * FROM `unit_conversion` LIMIT 10;
+SELECT * FROM `user` LIMIT 10;
+SELECT * FROM `user_equipement` LIMIT 10;
+SELECT * FROM `user_like_ingredient` LIMIT 10;
+SELECT * FROM `user_recipe_rating` LIMIT 10;
+SELECT * FROM `user_recommened_recipe` LIMIT 10;

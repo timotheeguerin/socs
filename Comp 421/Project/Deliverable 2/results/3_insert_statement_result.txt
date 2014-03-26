@@ -1,0 +1,28 @@
+
+mysql> INSERT INTO `ingredient` (`id`, `name`, `isbasic`) VALUES (1, 'water', 1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO `ingredient` (`id`, `name`, `isbasic`) VALUES (2, 'pasta', 0);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO `ingredient` (`id`, `name`, `isbasic`) VALUES (3, 'bacon', 0);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO `ingredient` (`id`, `name`, `isbasic`) VALUES (4, 'eggs', 0);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO `ingredient` (`id`, `name`, `isbasic`) VALUES (5, 'cream', 0);
+Query OK, 1 row affected (0.02 sec)
+
+
+
+mysql> SELECT * FROM ingredient;
++----+-------+---------+
+| id | name  | isbasic |
++----+-------+---------+
+|  1 | water |       1 |
+|  2 | pasta |       0 |
+|  3 | bacon |       0 |
+|  4 | eggs  |       0 |
+|  5 | cream |       0 |
++----+-------+---------+

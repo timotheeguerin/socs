@@ -1,0 +1,258 @@
+
+Query 1
+-------------------------------------------------------------------------------------------------
+-- Select all recipes that have all the 3 given ingredients
+
+-------------------------------------------------------------------------------------------------
+
+mysql> describe recipe;
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| id               | int(11)      | NO   | PRI | NULL    |       |
+| name             | varchar(255) | NO   |     | NULL    |       |
+| preparation_time | time         | NO   |     | NULL    |       |
+| cooking_time     | time         | NO   |     | NULL    |       |
+| preparation      | text         | NO   |     | NULL    |       |
+| rating           | int(11)      | NO   |     | NULL    |       |
+| point_required   | int(11)      | NO   |     | NULL    |       |
+| type_id          | int(11)      | NO   | MUL | NULL    |       |
+| user_id          | int(11)      | NO   | MUL | NULL    |       |
++------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> describe recipe_ingredient;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| recipe_id     | int(11) | NO   | PRI | NULL    |       |
+| ingredient_id | int(11) | NO   | PRI | NULL    |       |
+| unit_id       | int(11) | NO   | MUL | NULL    |       |
+| quantity      | float   | NO   |     | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT r.`name` FROM recipe r
+    -> JOIN recipe_ingredient ri ON ri.recipe_id = r.id
+    -> JOIN ingredient i ON i.id = ri.ingredient_id
+    -> WHERE i.`name` in ('cream', 'bacon', 'pasta')
+    -> GROUP BY r.`id`
+    -> HAVING COUNT(r.`id`) >= 3;
++---------------------+
+| name                |
++---------------------+
+| Spaghetti Carbonara |
++---------------------+
+1 row in set (0.00 sec)
+
+
+
+Query 2
+-------------------------------------------------------------------------------------------------
+-- Select recipe where the user has all the recipe equipement
+
+-------------------------------------------------------------------------------------------------
+
+mysql> describe recipe;
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| id               | int(11)      | NO   | PRI | NULL    |       |
+| name             | varchar(255) | NO   |     | NULL    |       |
+| preparation_time | time         | NO   |     | NULL    |       |
+| cooking_time     | time         | NO   |     | NULL    |       |
+| preparation      | text         | NO   |     | NULL    |       |
+| rating           | int(11)      | NO   |     | NULL    |       |
+| point_required   | int(11)      | NO   |     | NULL    |       |
+| type_id          | int(11)      | NO   | MUL | NULL    |       |
+| user_id          | int(11)      | NO   | MUL | NULL    |       |
++------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> describe recipe_equipement;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| recipe_id     | int(11) | NO   | PRI | NULL    |       |
+| equipement_id | int(11) | NO   | PRI | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT `name` FROM recipe WHERE id not in (
+    -> SELECT r.id FROM recipe r
+    -> JOIN recipe_equipement re ON re.recipe_id = r.id
+    -> WHERE
+    -> (SELECT COUNT(ue.equipement_id) FROM user_equipement ue WHERE ue.equipement_id = re.equipement_id AND ue.user_id = 1) = 0
+    -> );
++-----------------------+
+| name                  |
++-----------------------+
+| Spaghetti Carbonara   |
+| Apple Pie             |
+| Hamburger             |
+| Asparagus & Ham       |
+| Prune sausage         |
+| Salmon bagel          |
+| Salmon pasta          |
+| Potatoe gratin        |
+| Stuffed sweet potatoe |
+| Exotic Salad          |
++-----------------------+
+10 rows in set (0.00 sec)
+
+
+Query 3
+-------------------------------------------------------------------------------------------------
+-- Select all recipes that contains an ingredient the user like and order them by the count of ingredient the user like found in the recipe 
+
+-------------------------------------------------------------------------------------------------
+
+mysql> describe recipe;
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| id               | int(11)      | NO   | PRI | NULL    |       |
+| name             | varchar(255) | NO   |     | NULL    |       |
+| preparation_time | time         | NO   |     | NULL    |       |
+| cooking_time     | time         | NO   |     | NULL    |       |
+| preparation      | text         | NO   |     | NULL    |       |
+| rating           | int(11)      | NO   |     | NULL    |       |
+| point_required   | int(11)      | NO   |     | NULL    |       |
+| type_id          | int(11)      | NO   | MUL | NULL    |       |
+| user_id          | int(11)      | NO   | MUL | NULL    |       |
++------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> describe recipe_ingredient;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| recipe_id     | int(11) | NO   | PRI | NULL    |       |
+| ingredient_id | int(11) | NO   | PRI | NULL    |       |
+| unit_id       | int(11) | NO   | MUL | NULL    |       |
+| quantity      | float   | NO   |     | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT r.name FROM recipe r
+    -> JOIN recipe_ingredient ri ON ri.recipe_id = r.id
+    -> WHERE ri.ingredient_id in (SELECT ui.ingredient_id FROM user_like_ingredient ui WHERE ui.user_id = 1)
+    -> GROUP BY r.id
+    -> ORDER BY COUNT(r.id) DESC;
++---------------------+
+| name                |
++---------------------+
+| Apple Pie           |
+| Spaghetti Carbonara |
+| Prune sausage       |
+| Salmon pasta        |
++---------------------+
+4 rows in set (0.00 sec)
+
+
+
+Query 4
+-------------------------------------------------------------------------------------------------
+-- Select the most 3 liked ingredient
+--------------------------------------------------------------------------------------------------
+
+mysql> describe ingredient;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int(11)     | NO   | PRI | NULL    |       |
+| name    | varchar(45) | NO   |     | NULL    |       |
+| isbasic | tinyint(4)  | YES  |     | 0       |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe user_like_ingredient;
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| user_id       | int(11) | NO   | PRI | NULL    |       |
+| ingredient_id | int(11) | NO   | PRI | NULL    |       |
++---------------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT i.`name` FROM user_like_ingredient ui
+    -> JOIN ingredient i ON i.id = ui.ingredient_id
+    -> GROUP BY i.id
+    -> ORDER BY COUNT(i.id) DESC
+    -> LIMIT 3;
++-------------+
+| name        |
++-------------+
+| apple       |
+| puff pastry |
+| bacon       |
++-------------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+Query 5
+--------------------------------------------------------------------------
+-- Get the top 10 user at the specific level that make the best recipe
+
+-- This is calculated by getting the sum of the rating of all recipe a user as made and dividing it by the square root of its count. 
+
+-- So a user who made 10 recipe with rating 5 will be better ranked that a user who made one recipe with rating 5
+--------------------------------------------------------------------------
+
+mysql> describe recipe;
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| id               | int(11)      | NO   | PRI | NULL    |       |
+| name             | varchar(255) | NO   |     | NULL    |       |
+| preparation_time | time         | NO   |     | NULL    |       |
+| cooking_time     | time         | NO   |     | NULL    |       |
+| preparation      | text         | NO   |     | NULL    |       |
+| rating           | int(11)      | NO   |     | NULL    |       |
+| point_required   | int(11)      | NO   |     | NULL    |       |
+| type_id          | int(11)      | NO   | MUL | NULL    |       |
+| user_id          | int(11)      | NO   | MUL | NULL    |       |
++------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> describe user;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int(11)     | NO   | PRI | NULL    |       |
+| email     | varchar(45) | NO   |     | NULL    |       |
+| password  | varchar(45) | NO   |     | NULL    |       |
+| guidemode | tinyint(4)  | YES  |     | 0       |       |
+| level_id  | int(11)     | NO   | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> describe level;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| id             | int(11)     | NO   | PRI | NULL    |       |
+| name           | varchar(45) | NO   |     | NULL    |       |
+| point_required | int(11)     | YES  |     | 0       |       |
++----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT u.email
+    -> FROM recipe r
+    -> LEFT JOIN user u ON u.id = r.user_id
+    -> JOIN `level` l ON l.id = u.level_id
+    -> WHERE l.name = 'Beginner'
+    -> GROUP BY r.user_id
+    -> ORDER BY SUM(r.rating)/SQRT(COUNT(r.id)) DESC
+    -> LIMIT 10;
++-----------------+
+| email           |
++-----------------+
+| alex@olivier.hk |
+| timmy@guerin.uk |
+| lol@lool.fr     |
++-----------------+
+3 rows in set (0.00 sec)

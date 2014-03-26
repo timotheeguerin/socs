@@ -1,0 +1,197 @@
+mysql> select * from equipement;
++----+------+
+| id | name |
++----+------+
+|  1 | Pan  |
+|  2 | Oven |
+|  3 | Pot  |
++----+------+
+3 rows in set (0.00 sec)
+
+mysql> select * from ingredient;
++----+---------------+---------+
+| id | name          | isbasic |
++----+---------------+---------+
+|  1 | water         |       1 |
+|  2 | pasta         |       0 |
+|  3 | bacon         |       0 |
+|  4 | eggs          |       0 |
+|  5 | cream         |       0 |
+|  6 | apple         |       0 |
+|  7 | puff pastry   |       0 |
+|  ........................... |
+| 35 | salad         |       0 |
++----+---------------+---------+
+35 rows in set (0.01 sec)
+
+mysql> select * from level;
++----+--------------+----------------+
+| id | name         | point_required |
++----+--------------+----------------+
+|  1 | noob         |              0 |
+|  2 | beginner     |              1 |
+|  3 | apprentice   |              2 |
+|  4 | trainee      |              3 |
+|  5 | chef         |              4 |
+|  6 | special chef |              5 |
+|  7 | top chef     |              6 |
+|  8 | master chef  |              7 |
+|  9 | hell's cook  |              8 |
+| 10 | wizard       |              9 |
++----+--------------+----------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from recipe;
++----+-----------------------+------------------+--------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+----------------+---------+---------+
+| id | name                  | preparation_time | cooking_time | preparation                                                                                                                                                                                    | rating | point_required | type_id | user_id |
++----+-----------------------+------------------+--------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+----------------+---------+---------+
+|  1 | Spaghetti Carbonara   | 00:10:00         | 00:10:00     | Cook spaghettis in water, mix the pasta with cream and lardons in the pan, add the yellow part of the egg when serving                                                                         |      2 |              0 |       3 |       1 |
+|  2 | Apple Pie             | 00:10:00         | 00:30:00     | Cut an apple and put it on the puff pastry then insert into oven                                                                                                                               |      4 |              0 |       5 |       1 |
+|  3 | Hamburger             | 00:05:00         | 00:03:00     | Make the patty, toast the bread                                                                                                                                                                |      3 |              0 |       3 |       2 |
+|  4 | Asparagus & Ham       | 00:20:00         | 00:15:00     | Wrap the asparagus with ham, add cream & cheese and put in the oven                                                                                                                            |      6 |              0 |       3 |       6 |
+|  5 | Prune sausage         | 00:20:00         | 00:15:00     | Open up the sausage & stuff it with prunes & mustard, wrap bacon around it, put it in the oven                                                                                                 |      2 |              0 |       3 |       4 |
+|  6 | Salmon bagel          | 00:05:00         | 00:00:00     | Toast the bagel, add cream cheese, add the salmon, drops of lemon juice and sliced green onion                                                                                                 |      8 |              0 |       1 |       3 |
+|  7 | Salmon pasta          | 00:10:00         | 00:15:00     | Cook pasta, add cream, sliced salmon, fish eggs and sliced green onions                                                                                                                        |      4 |              0 |       3 |       4 |
+|  8 | Potatoe gratin        | 00:20:00         | 00:45:00     | Peel and boil the potatoes in a mix of water and milk for 20 mn with salt. Place them in a dish with cream and cheese.                                                                         |      1 |              2 |       4 |       2 |
+|  9 | Stuffed sweet potatoe | 00:30:00         | 00:30:00     | Bake the sweet potatoes, empty them, cook the broccolis and the mushrooms in a pan with butter, mix with the sweet potatoe and broiled bacon with riccota, put it back in the oven for 15 mn   |      5 |              4 |       4 |       6 |
+| 10 | Exotic Salad          | 00:15:00         | 00:00:00     | Peel the kiwis and the mango, mix it with the salad, add olive oil and vinegar                                                                                                                 |      0 |              3 |       2 |       5 |
++----+-----------------------+------------------+--------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+----------------+---------+---------+
+10 rows in set (0.00 sec)
+
+mysql> select * from recipe_equipement;
++-----------+---------------+
+| recipe_id | equipement_id |
++-----------+---------------+
+|         1 |             1 |
+|         3 |             1 |
+|         2 |             2 |
+|         4 |             2 |
+|         5 |             2 |
+|         8 |             2 |
+|         9 |             2 |
+|         1 |             3 |
+|         7 |             3 |
+|         8 |             3 |
++-----------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from recipe_ingredient;
++-----------+---------------+---------+----------+
+| recipe_id | ingredient_id | unit_id | quantity |
++-----------+---------------+---------+----------+
+|         1 |             2 |       1 |      150 |
+|         1 |             3 |       1 |       30 |
+|         1 |             4 |       2 |        1 |
+|         1 |             5 |       3 |     0.25 |
+|         2 |             6 |       2 |        1 |
+|         2 |             7 |       1 |       50 |
+|         3 |            23 |       2 |        1 |
+|         3 |            24 |       1 |      100 |
+|         4 |             5 |       3 |      0.1 |
+| .............................................. |
+|        10 |            35 |       1 |      200 |
++-----------+---------------+---------+----------+
+43 rows in set (0.00 sec)
+
+mysql> select * from recipe_type;
++----+-----------+
+| id | name      |
++----+-----------+
+|  1 | breakfast |
+|  2 | starter   |
+|  3 | main dish |
+|  4 | side      |
+|  5 | dessert   |
++----+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from unit;
++----+-----------+--------+
+| id | name      | symbol |
++----+-----------+--------+
+|  1 | Gram      | g      |
+|  2 | Unit      |        |
+|  3 | Liter     | L      |
+|  4 | Kilogram  | kg     |
+|  5 | Mililiter | ml     |
++----+-----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from unit_conversion;
++----+---------+-------+-------+---+
+| id | from_id | to_id | a     | b |
++----+---------+-------+-------+---+
+|  1 |       1 |     4 | 0.001 | 0 |
+|  2 |       3 |     5 |  1000 | 0 |
++----+---------+-------+-------+---+
+2 rows in set (0.00 sec)
+
+mysql> select * from user;
++----+---------------------+-----------+-----------+----------+
+| id | email               | password  | guidemode | level_id |
++----+---------------------+-----------+-----------+----------+
+|  1 | a@b.com             | caca      |         0 |        1 |
+|  2 | lol@lool.fr         | abc       |         0 |        2 |
+|  3 | icook@apple.com     | apple     |         0 |        1 |
+|  4 | timmy@guerin.uk     | tnt       |         0 |        2 |
+|  5 | vincent@petrella.fr | saucisson |         0 |        1 |
+|  6 | alex@olivier.hk     | creme     |         0 |        2 |
+|  7 | allo@aluile.com     | allo      |         0 |        4 |
++----+---------------------+-----------+-----------+----------+
+7 rows in set (0.00 sec)
+
+mysql> select * from user_equipement;
++---------+---------------+
+| user_id | equipement_id |
++---------+---------------+
+|       1 |             1 |
+|       2 |             1 |
+|       3 |             1 |
+|       4 |             1 |
+|       5 |             1 |
+|       6 |             1 |
+|       1 |             2 |
+|       2 |             2 |
+| ....................... |
+|       6 |             3 |
++---------+---------------+
+18 rows in set (0.00 sec)
+
+mysql> select * from user_like_ingredient;
++---------+---------------+
+| user_id | ingredient_id |
++---------+---------------+
+|       1 |             2 |
+|       1 |             6 |
+|       1 |             7 |
+|       2 |             3 |
+|       2 |             6 |
++---------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from user_recipe_rating;
++--------+---------+-----------+
+| rating | user_id | recipe_id |
++--------+---------+-----------+
+|      1 |       1 |         3 |
+|      1 |       1 |         4 |
+|      1 |       1 |         5 |
+|      1 |       1 |         6 |
+|      1 |       1 |         8 |
+|      1 |       1 |         9 |
+|      1 |       2 |         1 |
+|      1 |       2 |         4 |
+|      1 |       2 |         6 |
+| ............................ |
+|      1 |       6 |         7 |
++--------+---------+-----------+
+35 rows in set (0.00 sec)
+
+mysql> select * from user_recommended_recipe;
++---------+-----------+
+| user_id | recipe_id |
++---------+-----------+
+|       1 |         1 |
+|       1 |         7 |
++---------+-----------+
+2 rows in set (0.00 sec)

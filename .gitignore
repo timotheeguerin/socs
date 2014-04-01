@@ -16,3 +16,9 @@
 *.out
 *.app
 *.out
+
+#Remove windows specific files
+Thumbs.db
+~*
+*.tmp
+*.bak

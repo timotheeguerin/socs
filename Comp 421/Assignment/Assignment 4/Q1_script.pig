@@ -10,3 +10,4 @@ gen = foreach fltrd generate CONCAT(firstname, CONCAT(' ', lastname));
 results = DISTINCT gen;
 
 dump results;
+

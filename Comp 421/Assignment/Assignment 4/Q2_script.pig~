@@ -8,7 +8,7 @@ SPLIT fltrd INTO winners IF elected == 1, losers IF elected == 0;
 
 elections = JOIN winners BY (date, type, parl, prov, riding), losers BY (date, type, parl, prov, riding);
 
-vote_differences = foreach elections generate winners::lastname, losers::lastname, (winners.votes-losers.votes) as vote_difference:int;
+vote_differences = foreach elections generate winners::lastname as winner, losers::lastname as loser, (winners::votes-losers::votes) as vote_difference:int;
 
 results = FILTER vote_differences by vote_difference < 10;
 --print the result tuple to the screen

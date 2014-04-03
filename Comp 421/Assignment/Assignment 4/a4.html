@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+<div class="topheading">
+  <h1>Assignment 4: Hadoop and Pig</h1>
+<h4>Due date: Friday, March 11, 23:59 </h4>
+</div>
+
+Note that you do this assignment 4 in the groups that  you have
+created for your project. Although it&#39;s officially a group assignment
+where you only upload one solution per group, I recommend that you all do the assignment individually to
+practice working with the Amazon cloud.
+
+<p>
+
+Note: The setup and help information for this assignment was taken
+from the Homework 6 of the Fall
+2012 term of CSE 344 of University of Washington (<a href="http://www.cs.washington.edu/education/courses/cse344/12au/hw/hw6/hw6.html"> http://www.cs.washington.edu/education/courses/cse344/12au/hw/hw6/hw6.html)</a>
+
+<h2>Setup Instructions your Pig Cluster</h2>
+<ol>
+<li><strong>AMAZON CODES:</strong> You should have received your Amazon code by email. Please email the TA or instructor if you did not get the code. <p></p></li>
+<li><p> Follow the instructions given in AWSsetupandusage in the A3
+module of mycourses to setup the cluster. NOTE: It will take you a good <strong>60 minutes</strong>
+ to go through all these instructions without even trying to run 
+example.pig at the end. But they are worth it. You are learning how to 
+use the Amazon cloud, which is by far the most popular cloud today! At 
+the end, the instructions will refer to <em>example.pig</em>. This is
+the name of the sample program that we will run in the next
+step.</p></li>
+</ol>
+
+<h2>Useful Links</h2>
+<p><a href="http://wiki.apache.org/pig/PigLatin" target="_blank">Pig
+Latin wiki page</a>
+<p><a href="http://pig.apache.org/docs/r0.7.0/index.html" target="_blank">Hadoop&#39;s Pig Latin Documentation</a>
+
+
+
+
+<h2> Information about the data used in this assignment </h2>
+
+The data used in this assignment is the record of federal elections for MPs in Canadian
+House of Commons since 1867. The original source can be found at:
+http://data.gc.ca/data/en/dataset/ea8f2c37-90b6-4fee-857e-984d3060184e.
+The complete data set has already been loaded on S3 at s3n://electiondata421/data2.csv.
+Note that some modifications have been made to the original data to allow more precise
+schema declarations.
+<br/>
+Each entry in the file has the following fields in order:
+<ol>
+  <li>  The date of the election.
+</li><li> The election type (either Gen or B/P for by-election).
+</li><li> The number of the Parliament session.
+</li><li> Province where the election took place.
+</li><li> Electoral district.
+</li><li> Last name of the candidate.
+</li><li> First name of the candidate.
+</li><li> Gender (F, otherwise either M or &#39;&#39;).
+</li><li> Occupation of the candidate.
+</li><li> Party of the candidate.
+</li><li> Number of votes received.
+</li><li> Percentage of total votes.
+</li><li> Whether the candidate won (Elected = 1, Defeated = 0).
+</li></ol>
+
+  When the data is loaded, you should define the schema so that the columns can be referred
+to by name. Also, datatypes are defined here to avoid unnecessarily casting every time the
+value is used.
+
+<p>
+
+raw = LOAD &#39;s3n://electiondata421/data2.csv&#39; USING PigStorage(&#39;,&#39;) AS
+(date, type:chararray, parl:int, prov:chararray,
+riding:chararray, lastname:chararray, firstname:chararray,
+gender:chararray, occupation:chararray, party:chararray,
+votes:int, percent:double, elected:int) ;
+
+<p>
+(Date left unconverted.)
+
+
+<p><b>TURN IN INSTRUCTIONS:</b> Turn in seven files <br/>
+<span style="color: red;">What to turn is marked in red</span></p>
+<br/>
+
+
+<h2>Qestion 0: When was Stephen Harper first elected to
+Parliament? (0 Points)</h2>
+
+The goal of this task is to successfully set up and run the Pig cluster. After going through the
+setup instructions, you will run the file example.pig ( provided for
+in the module a4 on mycourses). This script will load the data from S3,
+choose only the records pertaining to Stephen Harper and return the one with the smallest
+date. You are going to run the file by pasting it into the interactive
+grunt shell.
+<p>
+The script will take a few minutes to run.
+<p>
+At the end, you should see totals for how many records were read in and out and a tuple right
+above the prompt that looks like this: (1993-10-25 00:00:00, Harper, Stephen).
+Run the following line to see how the results relation was generated: illustrate results;.
+
+<p>
+<span style="color: red;"> You do not need to submit anything for this
+question. </span>
+
+
+
+
+<br/>
+</p><h2>Question 1:  Which candidates have won with
+over 60% of the vote? (20 Points)</h2>
+<p>
+Modify the example.pig file to answer this question.
+<p>
+
+First, change the filter statement to eliminate rows with percentages less than 60.
+<p>
+
+Then replace the foreach directive with: gen = foreach fltrd generate CONCAT(firstname,
+CONCAT(&#39; &#39;, lastname);.
+
+<p>
+Last, eliminate duplicates using DISTINCT. You should remove the ordering and limiting
+directives and then store the results into one of your S3 buckets.
+
+<p><b>What you need to turn in:</b><br/>
+  <span style="color: red;"> Submit your script as Q1_script.pig..
+
+<h2>Question 2: Find the closest election margins in history where over 100 votes were
+cast for each candidate. (20 Points)</h2>
+
+Start by eliminating all candidates with less than 100 votes.
+<p>
+Split the relation into those who won and those who lost.
+<p>
+Join the all the candidates back together and make tuples with the last names of both
+candidates (elected and defeated) and the difference between their vote totals. Include only
+tuples where the difference is less than 10.
+<p>
+Store the results in S3.
+
+<p> Run your script on a cluster with 1 master node and 2 core nodes and answer the questions
+below:
+<ul>
+ (a) How many Maps and Reduces are generated in each job? <p>
+ (b) What does the schema look like just after the join? <p>
+ (c) How long did the query run?
+</p></p></ul>
+
+
+  <span style="color: red;">Submit your script as Q2_script.pig and
+ answers in: pig_answers2.txt.
+</span></p>
+
+<h2>Question 3: How many members added between each Parliament? (20 Points)</h2>
+
+Consider only general election winners. Dump to the screen a list of (Parliament, count)
+tuples showing the difference between that Parliament and the previous one sorted ascending
+by Parliament number.
+<p>
+
+Answer the following question:
+<ul>
+   (a) What does the schema look like immediately after the group
+  by? Is is nested or flat? <p>
+   (b) How long did your query run?
+</p></ul>
+
+  <span style="color: red;">Submit your script as Q3_script.pig and
+ answers in: pig_answers3.txt.
+</span></p>
+
+  
+<h2>Question 4: For each Parliament, how many members were of each party?
+You will. (20 Points)</h2>
+
+You will use the PigStorage function to generate a CSV file where each line has the
+Parliament number, the party name and the number of MPs from that party, along with the
+total number of MPs in that Parliament. The file need not be sorted. Write the query in any
+way you please.
+
+<p>
+
+  <span style="color: red;">Submit your script as Q4_script.pig.
+</span></p>
+
+<h2>Question 5 (on a different data set): How many words
+were scanned from 1990? (20 Points) </h2>
+
+For the last question, you will be using a 1 GB sample from the Google Ngrams dataset. The
+each record has three values (word, year, number of occurences). The data is stored as a
+CSV file here: &#39;s3n://googleNgramsSample/ngrams421.csv&#39;.
+
+<p>
+You have to write a script that answers the following question: How many words
+were scanned from 1990?
+
+<p>
+The script should dump the result to the screen.
+
+<p>
+
+  <span style="color: red;">Submit your script as Q5_script.pig 
+</span></p>
+
+
+
+
+</p></p></p></p></p></span></p></p></p></p></p></p></p></p></p></p></p></p><script type="text/javascript" src="/d2l/common/math/MathML.js?v=10.1.0.475-41 "></script><script type="text/javascript">D2LMathML.DesktopInit('/d2l/common/mathjax/2.0.1/MathJax.js?config=MML_HTMLorMML','/d2l/common/mathjax/2.0.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML');</script></body></html>

@@ -4,13 +4,13 @@ raw = LOAD '/user/hadoop/data2.csv' USING PigStorage(',') AS  (date, type:charar
 --some data entries use the middle name as well, so this way we will catch all of them
 fltrd = FILTER raw by votes < 100;
 
-SPLIT filtrd INTO winners IF elected == 1, losers IF elected == 2
+SPLIT fltrd INTO winners IF elected == 1, losers IF elected == 0;
 
---project only the needed fields
-gen = foreach fltrd generate CONCAT(firstname, CONCAT(' ', lastname));
+elections = JOIN winners BY date, losers BY date;
 
---choose only the smallest date
-results = DISTINCT fltrd;
+elections_b = foreach elections generate (int)(winners.votes-losers.votes) as vote_difference, [other fields...];
 
+elections_c = FILTER elections_b by vote_difference < 10;
 --print the result tuple to the screen
-dump results;
+
+dump elections_c;

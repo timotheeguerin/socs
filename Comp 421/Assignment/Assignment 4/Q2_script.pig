@@ -8,9 +8,9 @@ SPLIT fltrd INTO winners IF elected == 1, losers IF elected == 0;
 
 elections = JOIN winners BY date, losers BY date;
 
-elections_b = foreach elections generate (int)(winners.votes-losers.votes) as vote_difference, [other fields...];
+vote_differences = foreach elections generate winners, losers, (winners.votes-losers.votes) as vote_difference:int;
 
-elections_c = FILTER elections_b by vote_difference < 10;
+elections_c = FILTER vote_differences by vote_difference < 10;
 --print the result tuple to the screen
 
 dump elections_c;

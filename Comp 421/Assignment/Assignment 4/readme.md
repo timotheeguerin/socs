@@ -1,6 +1,7 @@
 #Comp 421 Assignment 4
 
 Setup(because she not able to give the right instructions)
+This worked for me at least
 * Download the data2.csv from the discussion board
 * Upload it to the root of your instance as `data2.csv`.
 * `pig`

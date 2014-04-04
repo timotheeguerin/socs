@@ -21,3 +21,9 @@ Or upload it to one one your s3 instance using amazon console managment(S3>Your 
 ```bash
 wget http://urlgiven-by-amazon
 ```
+
+My links so you can just `wget` them
+```
+https://s3.amazonaws.com/comp421-h4/data2.csv
+https://s3.amazonaws.com/comp421-h4/ngrams421.csv
+```

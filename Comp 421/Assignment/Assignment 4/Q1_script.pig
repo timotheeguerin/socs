@@ -9,5 +9,7 @@ gen = foreach fltrd generate CONCAT(firstname, CONCAT(' ', lastname));
 
 results = DISTINCT gen;
 
-dump results;
+STORE results INTO 's3n://comp421-h4/q1_results';
+
+
 

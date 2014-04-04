@@ -1,3 +1,13 @@
 --load the data from S3 and define the schema
-raw = LOAD 's3n://googleNgramsSample/ngrams421.csv' USING PigStorage(',') AS  (date, type:chararray, parl:int, prov:chararray, riding:chararray, lastname:chararray, firstname:chararray,gender:chararray, occupation:chararray, party:chararray,votes:int, percent:double, elected:int);
+raw = LOAD '/user/hadoop/ngrams421.csv' USING PigStorage(',') AS  (word:chararray, year:int, occurences:int);
+
+fltrd = FILTER raw by year >= 1990;
+
+word_group = GROUP fltrd ALL;
+results = FOREACH word_group GENERATE COUNT($1);
+
+dump results;
+
+
+
 

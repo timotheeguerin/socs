@@ -13,6 +13,7 @@ vote_differences = foreach elections generate winners::lastname as winner, loser
 results = FILTER vote_differences by vote_difference < 10;
 --print the result tuple to the screen
 
-dump results;
+
+STORE results INTO 's3n://comp421-h4/q2_results';
 
 

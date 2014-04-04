@@ -11,3 +11,13 @@ This worked for me at least
 raw = LOAD '/user/hadoop/data2.csv' USING PigStorage(',') AS  (date, type:chararray, parl:int, prov:chararray, riding:chararray, lastname:chararray, firstname:chararray,gender:chararray, occupation:chararray, party:chararray,votes:int, percent:double, elected:int);
 ```
 * Have fun with running year long query!
+
+
+To copy to server either use `scp`:
+```bash
+scp -i your_key data2.csv hadoop@server-blabla.com
+```
+Or upload it to one one your s3 instance using amazon console managment(S3>Your bucket>Upload)and use `wget` Dont forget to set permission or it might not work
+```bash
+wget http://urlgiven-by-amazon
+```

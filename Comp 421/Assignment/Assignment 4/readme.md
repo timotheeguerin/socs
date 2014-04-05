@@ -14,7 +14,6 @@ You might need to open ssh port on the server. To do that go to EC2 > instance c
 
 ###Load the file
 
-####METHOD 2
 Download the file in your local 
 ```bash
 wget https://s3.amazonaws.com/comp421-h4/data2.csv

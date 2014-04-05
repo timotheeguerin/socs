@@ -1,7 +1,17 @@
 #Comp 421 Assignment 4
 
-Setup(because she not able to give the right instructions)
+
+##Setup(because she not able to give the right instructions)
 This worked for me at least
+
+###Active user key error
+If you have an error when creating the cluster saying no active key found for user, you need to cerate a key for the user(AWS console> Username > security > active key > create one)
+
+###Connection timeout when trying to connect to ssh
+You might need to open ssh port on the server. To do that go to EC2 > instance click on the cluster > inbound > add port 22 alowed from anywhere)
+
+
+###Load the file
 * Download the data2.csv from the discussion board
 * Upload it to the root of your instance as `data2.csv`.
 * `pig`

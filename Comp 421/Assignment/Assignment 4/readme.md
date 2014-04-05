@@ -13,27 +13,14 @@ You might need to open ssh port on the server. To do that go to EC2 > instance c
 
 
 ###Load the file
-Multiple methods to upload the file to your server.
-####METHOD 1
-* Download the data2.csv from the discussion board
-* Upload it to the root of your instance as `data2.csv`.
-To copy to server either use `scp`:
-```bash
-scp -i your_key data2.csv hadoop@server-blabla.com
-```
-Or upload it to one one your s3 instance using amazon console managment(S3>Your bucket>Upload)and use `wget` Dont forget to set permission or it might not work
-```bash
-wget http://urlgiven-by-amazon
-```
+
 ####METHOD 2
-Or you can just use my links which is a lot easier 
+Download the file in your local 
 ```bash
 wget https://s3.amazonaws.com/comp421-h4/data2.csv
 wget https://s3.amazonaws.com/comp421-h4/ngrams421.csv
 ```
-
-
-
+Then
 * `pig`
 * `fs -copyFromLocal data2.csv /user/hadoop/data2.csv`
 * change the raw command to 

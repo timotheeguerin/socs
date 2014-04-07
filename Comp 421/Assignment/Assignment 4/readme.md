@@ -8,7 +8,7 @@ This worked for me at least
 If you have an error when creating the cluster saying no active key found for user, you need to cerate a key for the user(AWS console> Username > security > active key > create one)
 
 ###Connection timeout when trying to connect to ssh
-You might need to open ssh port on the server. To do that go to EC2 > instance click on the cluster > inbound > add port 22 alowed from anywhere)
+You might need to open ssh port on the server. To do that go to AWS console > EC2> Security group(in the left bar)> choose instance(master or slave dont know which one) > inbound> edit > add rule > ssh (set from everywhwere)
 
 
 

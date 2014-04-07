@@ -1,7 +1,7 @@
 #Comp 421 Assignment 4
 
 
-##Setup(because she not able to give the right instructions)
+##Setup(because she isn't able to give the right instructions)
 This worked for me at least
 
 ###Active user key error

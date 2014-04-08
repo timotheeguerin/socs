@@ -1,7 +1,7 @@
 #Answers
 a)This generated
-	5 map 
-	4 reduce
+	3 map 
+	1 reduce
 
 b){winners::date: bytearray,winners::type: chararray,winners::parl: int,winners::prov: chararray,winners::riding: chararray,winners::lastname: chararray,winners::firstname: chararray,winners::gender: chararray,winners::occupation: chararray,winners::party: chararray,winners::votes: int,winners::percent: double,winners::elected: int,losers::date: bytearray,losers::type: chararray,losers::parl: int,losers::prov: chararray,losers::riding: chararray,losers::lastname: chararray,losers::firstname: chararray,losers::gender: chararray,losers::occupation: chararray,losers::party: chararray,losers::votes: int,losers::percent: double,losers::elected: int}
 

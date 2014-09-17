@@ -84,7 +84,6 @@ public class PokerHandGenerator extends JFrame implements ActionListener
 
 	private Card[] twoPairs()
 	{
-		// Left as an exercise
 		return new Card[0]; // TODO You probably want to change this
 	}
 	

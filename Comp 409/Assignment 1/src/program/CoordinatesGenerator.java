@@ -8,35 +8,27 @@ import java.util.concurrent.ConcurrentHashMap;
  * Generate n random points using p threads
  */
 public class CoordinatesGenerator extends Program {
+    public Map<Integer, Boolean> points_hash = new ConcurrentHashMap<Integer, Boolean>();
+    public Point[] points;
+    public boolean unique = true;
 
-    private Map<Point, Boolean> points;
+    public CoordinatesGenerator()
+    {
 
-    public CoordinatesGenerator(int q, int n, int p) {
-        this.setArgs(q, n, p);
-
-        this.points = new ConcurrentHashMap<Point, Boolean>();
-    }
-
-    /**
-     * Add a new point to the array only if the point doesn't exist yet.
-     *
-     * @param point Point to add
-     * @return boolean if more points can be added
-     */
-    public boolean addPoint(Point point) {
-        if (points.size() < n) {
-            points.put(point, true);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override
-    public void run() {
+    public void init() {
+    }
+
+    @Override
+    public Point[] run() {
+        points = new Point[n];
         Thread[] threads = new Thread[n];
         for (int i = 0; i != p; i++) {
-            threads[i] = new Thread(new CoordinatesGeneratorThread(this));
+            int start_index = i * n / p;
+            int end_index = (i + 1) * n / p;
+            threads[i] = new Thread(new CoordinatesGeneratorThread(start_index, end_index));
             threads[i].start();
 
         }
@@ -50,20 +42,30 @@ public class CoordinatesGenerator extends Program {
                 }
             }
         }
-        System.out.println("Point gen: " + points.size());
+        System.out.println("Point: " + points_hash.size());
+        return points;
     }
 
     public class CoordinatesGeneratorThread implements Runnable {
-        public CoordinatesGenerator generator;
+        private int start_index, end_index;
 
-        public CoordinatesGeneratorThread(CoordinatesGenerator generator) {
-            this.generator = generator;
+        public CoordinatesGeneratorThread(int start_index, int end_index) {
+            this.start_index = start_index;
+            this.end_index = end_index;
         }
 
         public void run() {
-            while (addPoint(Point.random())) {
-
+            for (int i = start_index; i != end_index; i++) {
+                while (true) {
+                    Point point = Point.random();
+                    int code = point.hashCode();
+                    if (!unique || points_hash.put(code, true) == null) {
+                        points[i] = point;
+                        break;
+                    }
+                }
             }
         }
+
     }
 }

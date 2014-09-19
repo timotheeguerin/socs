@@ -1,4 +1,5 @@
 import program.CoordinatesGenerator;
+import program.MinimumFinder;
 import program.Program;
 
 /**
@@ -8,6 +9,7 @@ public class Graham {
     private int q;
     private int n;
     private int p;
+    private Program program;
 
     public Graham() {
 
@@ -22,25 +24,51 @@ public class Graham {
         engine.q = Integer.parseInt(args[0]);
         engine.n = Integer.parseInt(args[1]);
         engine.p = Integer.parseInt(args[2]);
-        engine.p = 8;
-        for(int i = 0; i < 10; i ++) {
-            long start_time = System.currentTimeMillis();
-            engine.run();
-            long end_time = System.currentTimeMillis();
-            System.out.printf("Running time: %d\n", (end_time - start_time));
+
+        int[] thread_nbs;
+        int sample_size;
+        engine.init();
+        if (args.length > 3) {
+            thread_nbs = new int[]{1, 2, 4, 8, 16, 32};
+            sample_size = Integer.parseInt(args[3]);
+
+        } else {
+            thread_nbs = new int[]{1};
+            sample_size = 1;
+        }
+        for (int thread_nb : thread_nbs) {
+            engine.p = thread_nb;
+            long start_time, end_time;
+            long sum = 0;
+            for (int i = 0; i < sample_size; i++) {
+                start_time = System.currentTimeMillis();
+                engine.run();
+                end_time = System.currentTimeMillis();
+                if (sample_size <= 1 ||  i > 0) {
+                    sum += end_time - start_time;
+                }
+            }
+            System.out.printf("Thread %d: Running time: %f\n", thread_nb, ((double) sum / sample_size));
         }
     }
-
-    public void run() {
-        Program program;
+    public void init() {
         switch (q) {
             case 1:
-                program = new CoordinatesGenerator(q,n,p);
+                program = new CoordinatesGenerator();
+                break;
+            case 2:
+                program = new MinimumFinder();
                 break;
             default:
                 System.err.println("Wrong value for q, should be 1,2,3 or 4!");
                 return;
         }
+        program.q = q;
+        program.n = n;
+        program.p = p;
+        program.init();
+    }
+    public void run() {
         program.run();
     }
 

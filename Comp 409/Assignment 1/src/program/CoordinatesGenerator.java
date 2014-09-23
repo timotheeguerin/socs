@@ -8,12 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * Generate n random points using p threads
  */
 public class CoordinatesGenerator extends Program {
-    public Map<Integer, Boolean> points_hash = new ConcurrentHashMap<Integer, Boolean>();
+    public Map<Point, Boolean> points_hash = new ConcurrentHashMap<Point, Boolean>();
     public Point[] points;
-    public boolean unique = true;
 
-    public CoordinatesGenerator()
-    {
+    public CoordinatesGenerator() {
 
     }
 
@@ -23,6 +21,7 @@ public class CoordinatesGenerator extends Program {
 
     @Override
     public Point[] run() {
+        points_hash.clear();
         points = new Point[n];
         Thread[] threads = new Thread[n];
         for (int i = 0; i != p; i++) {
@@ -42,7 +41,7 @@ public class CoordinatesGenerator extends Program {
                 }
             }
         }
-        System.out.println("Point: " + points_hash.size());
+//        System.out.println("Point: " + points_hash.size());
         return points;
     }
 
@@ -58,8 +57,7 @@ public class CoordinatesGenerator extends Program {
             for (int i = start_index; i != end_index; i++) {
                 while (true) {
                     Point point = Point.random();
-                    int code = point.hashCode();
-                    if (!unique || points_hash.put(code, true) == null) {
+                    if (points_hash.put(point, true) == null) {
                         points[i] = point;
                         break;
                     }

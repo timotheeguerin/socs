@@ -7,23 +7,23 @@ import java.util.Random;
  * Point container class
  */
 public final class Point implements Comparable<Point> {
-    public long x;
-    public long y;
+    public int x;
+    public int y;
 
     public Point() {
         this.x = 0;
         this.y = 0;
     }
 
-    public Point(long x, long y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
     public static Point random() {
         Random r = new Random();
-        long x = r.nextLong();
-        long y = r.nextLong();
+        int x = r.nextInt();
+        int y = r.nextInt();
         return new Point(x, y);
     }
 
@@ -53,7 +53,6 @@ public final class Point implements Comparable<Point> {
                 return Double.compare(this.r(), other.r());
             }
         }
-
     }
 
     public int compareByY(Point other) {

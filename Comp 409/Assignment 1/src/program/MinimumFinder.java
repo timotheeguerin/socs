@@ -5,18 +5,18 @@ package program;
  * Created by tim on 14-09-19.
  */
 public class MinimumFinder extends Program {
-    public volatile Point[] points;
+    public Point[] points;
 
     private volatile Point[] thread_results;
 
     public MinimumFinder() {
+
     }
 
     public void init() {
         CoordinatesGenerator generator = new CoordinatesGenerator();
         generator.copyArgsFrom(this);
         generator.init();
-        generator.unique = false;
         this.points = generator.run();
     }
 
@@ -61,12 +61,11 @@ public class MinimumFinder extends Program {
         public void run() {
             Point best = points[start_index];
             for (int i = start_index + 1; i != end_index; i++) {
-                if (points[i].compareByY(best) == -1) {
-                    best = points[i];
-                }
+//                if (points[i].compareByY(best) == -1) {
+//                    best = points[i];
+//                }
             }
             thread_results[thread_index] = best;
         }
-
     }
 }

@@ -26,13 +26,14 @@ public final class Point implements Comparable<Point> {
         int y = r.nextInt();
         return new Point(x, y);
     }
-
+    
     public double r() {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public double angle() {
-        return Math.atan((double) y / (double) x);
+        double val = Math.atan((double) y / (double) x);
+        return val >= 0 ? val : Math.PI - val;
     }
 
     @Override

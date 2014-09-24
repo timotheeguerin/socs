@@ -1,8 +1,10 @@
 import program.CoordinatesGenerator;
 import program.MinimumFinder;
 import program.Program;
+import program.Sorter;
 
 /**
+ *
  * Created by tim on 14-09-17.
  */
 public class Graham {
@@ -29,11 +31,11 @@ public class Graham {
         int sample_size;
         engine.init();
         if (args.length > 3) {
-            thread_nbs = new int[]{1, 2, 4, 8, 16, 32};
+            thread_nbs = new int[]{1, 2, 4, 8, 16, 32, 64};
             sample_size = Integer.parseInt(args[3]);
 
         } else {
-            thread_nbs = new int[]{1};
+            thread_nbs = new int[]{Integer.parseInt(args[2])};
             sample_size = 1;
         }
         for (int thread_nb : thread_nbs) {
@@ -58,6 +60,9 @@ public class Graham {
                 break;
             case 2:
                 program = new MinimumFinder();
+                break;
+            case 3:
+                program = new Sorter();
                 break;
             default:
                 System.err.println("Wrong value for q, should be 1,2,3 or 4!");

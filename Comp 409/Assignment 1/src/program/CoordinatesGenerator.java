@@ -11,6 +11,8 @@ public class CoordinatesGenerator extends Program {
     public Map<Point, Boolean> points_hash = new ConcurrentHashMap<Point, Boolean>();
     public Point[] points;
 
+    public boolean skip_uniqueness = false;
+
     public CoordinatesGenerator() {
 
     }
@@ -57,7 +59,7 @@ public class CoordinatesGenerator extends Program {
             for (int i = start_index; i != end_index; i++) {
                 while (true) {
                     Point point = Point.random();
-                    if (points_hash.put(point, true) == null) {
+                    if (skip_uniqueness || points_hash.put(point, true) == null) {
                         points[i] = point;
                         break;
                     }

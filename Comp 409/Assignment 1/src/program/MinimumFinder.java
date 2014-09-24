@@ -2,6 +2,7 @@ package program;
 
 
 /**
+ *
  * Created by tim on 14-09-19.
  */
 public class MinimumFinder extends Program {
@@ -17,6 +18,7 @@ public class MinimumFinder extends Program {
         CoordinatesGenerator generator = new CoordinatesGenerator();
         generator.copyArgsFrom(this);
         generator.init();
+        generator.skip_uniqueness = true;
         this.points = generator.run();
     }
 

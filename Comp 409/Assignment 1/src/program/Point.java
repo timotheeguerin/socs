@@ -1,5 +1,6 @@
 package program;
 
+
 import java.util.Random;
 
 /**
@@ -10,6 +11,7 @@ public final class Point implements Comparable<Point> {
     public int x;
     public int y;
 
+    @SuppressWarnings("unused")
     public Point() {
         this.x = 0;
         this.y = 0;
@@ -26,14 +28,14 @@ public final class Point implements Comparable<Point> {
         int y = r.nextInt();
         return new Point(x, y);
     }
-    
+
     public double r() {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public double angle() {
         double val = Math.atan((double) y / (double) x);
-        return val >= 0 ? val : Math.PI - val;
+        return val >= 0 ? val : 2 * Math.PI + val;
     }
 
     @Override

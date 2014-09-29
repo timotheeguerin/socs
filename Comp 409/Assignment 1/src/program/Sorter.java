@@ -17,6 +17,34 @@ public class Sorter extends Program {
     private int minPartitionSize;
 
 
+    /**
+     * Sort in place the given array of points
+     *
+     * @param points    Points to sort
+     * @param thread_nb Number of thread to use
+     */
+    public static void sort(Point[] points, int thread_nb) {
+        Sorter sorter = new Sorter();
+        sorter.setArgs(points.length, thread_nb);
+        sorter.points = points;
+        sorter.run();
+    }
+
+    /**
+     * Check if an array is sorted
+     *
+     * @param points Points to check
+     */
+    public static boolean isSorted(Point[] points) {
+        for (int i = 1; i < points.length; i++) {
+            if (points[i - 1].angle() > points[i].angle()) {
+                System.out.println("Error not sorted");
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public Point[] run() {
         this.minPartitionSize = points.length / thread_nb;
@@ -29,13 +57,7 @@ public class Sorter extends Program {
             e.printStackTrace();
         }
 
-        for (int i = 1; i < points.length; i++) {
-            if (points[i - 1].angle() > points[i].angle()) {
-                System.out.println("Error not sorted");
-            }
-        }
-//        System.out.println(points[0].angle());
-//        System.out.println(points[points.length - 1].angle());
+
         executor.shutdown();
         return points;
     }

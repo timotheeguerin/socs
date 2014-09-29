@@ -35,6 +35,7 @@ public class Graham {
             thread_nbs = new int[]{Integer.parseInt(args[2])};
             sample_size = 1;
         }
+
         for (int thread_nb : thread_nbs) {
             engine.p = thread_nb;
             long start_time, end_time;
@@ -58,7 +59,7 @@ public class Graham {
                 break;
             case 2:
                 MinimumFinder finder = new MinimumFinder();
-                finder.points = CoordinatesGenerator.generate(n, p);
+                finder.points = CoordinatesGenerator.generateNonUnique(n, p);
                 program = finder;
                 break;
             case 3:
@@ -66,11 +67,11 @@ public class Graham {
                 sorter.points = CoordinatesGenerator.generate(n, p);
                 program = sorter;
                 break;
-
             case 4:
                 ConvexHull hull = new ConvexHull();
                 hull.points = CoordinatesGenerator.generate(n, p);
                 program = hull;
+                break;
             default:
                 System.err.println("Wrong value for q, should be 1,2,3 or 4!");
                 return;

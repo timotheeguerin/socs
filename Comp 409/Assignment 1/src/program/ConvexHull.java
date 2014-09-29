@@ -10,6 +10,9 @@ public class ConvexHull extends Program {
 
     @Override
     public Object run() {
+        System.out.println("running...");
+        Sorter.sort(points, thread_nb);
+        System.out.println(Sorter.isSorted(points));
         return null;
     }
 
@@ -23,6 +26,7 @@ public class ConvexHull extends Program {
         }
 
         public void run() {
+
             for (int i = start_index; i != end_index; i++) {
 
             }

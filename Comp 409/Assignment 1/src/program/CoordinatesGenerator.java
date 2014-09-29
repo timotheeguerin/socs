@@ -30,6 +30,20 @@ public class CoordinatesGenerator extends Program {
         return generator.run();
     }
 
+    /**
+     * Static method used to generate an array of random NON UNIQUE points
+     *
+     * @param n         Amount of point to generate
+     * @param thread_nb Number of thread to use
+     * @return points generated
+     */
+    public static Point[] generateNonUnique(int n, int thread_nb) {
+        CoordinatesGenerator generator = new CoordinatesGenerator();
+        generator.setArgs(n, thread_nb);
+        generator.skip_uniqueness = true;
+        return generator.run();
+    }
+
     @Override
     public Point[] run() {
         points_hash.clear();

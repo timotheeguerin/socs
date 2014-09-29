@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by tim on 14-09-17.
- * Generate n random points using p threads
+ * Generate n random points using thread_nb threads
  */
 public class CoordinatesGenerator extends Program {
     public Map<Point, Boolean> points_hash = new ConcurrentHashMap<Point, Boolean>();
@@ -17,8 +17,17 @@ public class CoordinatesGenerator extends Program {
 
     }
 
-    @Override
-    public void init() {
+    /**
+     * Static method used to generate an array of random unique points
+     *
+     * @param n         Amount of point to generate
+     * @param thread_nb Number of thread to use
+     * @return points generated
+     */
+    public static Point[] generate(int n, int thread_nb) {
+        CoordinatesGenerator generator = new CoordinatesGenerator();
+        generator.setArgs(n, thread_nb);
+        return generator.run();
     }
 
     @Override
@@ -26,9 +35,9 @@ public class CoordinatesGenerator extends Program {
         points_hash.clear();
         points = new Point[n];
         Thread[] threads = new Thread[n];
-        for (int i = 0; i != p; i++) {
-            int start_index = i * n / p;
-            int end_index = (i + 1) * n / p;
+        for (int i = 0; i != thread_nb; i++) {
+            int start_index = i * n / thread_nb;
+            int end_index = (i + 1) * n / thread_nb;
             threads[i] = new Thread(new CoordinatesGeneratorThread(start_index, end_index));
             threads[i].start();
 
@@ -43,7 +52,6 @@ public class CoordinatesGenerator extends Program {
                 }
             }
         }
-//        System.out.println("Point: " + points_hash.size());
         return points;
     }
 

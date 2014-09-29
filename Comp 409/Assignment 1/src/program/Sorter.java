@@ -12,23 +12,15 @@ import java.util.concurrent.TimeUnit;
 public class Sorter extends Program {
     private ExecutorService executor;
 
-    private Point[] points;
+    public Point[] points;
 
     private int minPartitionSize;
 
-    @Override
-    public void init() {
-        CoordinatesGenerator generator = new CoordinatesGenerator();
-        generator.copyArgsFrom(this);
-        generator.init();
-        generator.skip_uniqueness = true;
-        this.points = generator.run();
-        this.minPartitionSize = points.length / p;
-    }
 
     @Override
     public Point[] run() {
-        executor = Executors.newFixedThreadPool(this.p);
+        this.minPartitionSize = points.length / thread_nb;
+        executor = Executors.newFixedThreadPool(this.thread_nb);
         Thread thread = new Thread(new SorterThread(0, points.length - 1));
         thread.run();
         try {

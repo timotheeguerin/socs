@@ -1,4 +1,4 @@
-package program;
+package graham;
 
 
 import java.util.Random;

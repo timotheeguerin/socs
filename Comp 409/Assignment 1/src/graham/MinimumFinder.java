@@ -1,4 +1,4 @@
-package program;
+package graham;
 
 
 /**
@@ -51,7 +51,6 @@ public class MinimumFinder extends Program {
             threads[i].start();
 
         }
-
         for (Thread thread : threads) {
             if (thread != null) {
                 try {
@@ -63,7 +62,6 @@ public class MinimumFinder extends Program {
         }
 
         int best = thread_results[0];
-        System.out.println("BEST OF BEST: " + best + " --- " + points[best]);
         for (int i = 1; i != thread_nb; i++) {
             if (points[thread_results[i]].compareByY(points[best]) == -1) {
                 best = thread_results[i];

@@ -1,4 +1,4 @@
-package program;
+package graham;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,23 +16,10 @@ public class ConvexHull extends Program {
 
     @Override
     public Object run() {
-//        points = new Point[]{new Point(0, -1000000000), new Point(0, 1000000000),
-//                new Point(-1000000000, 0), new Point(-1000000000, -990000000), new Point(-300000000, -700000000)};
         Sorter.sort(points, thread_nb); //Sort the remaining of the array
         int minimum_index = MinimumFinder.findMinimumIndex(points, thread_nb);
-        for (Point p : points) {
-            System.out.println(p);
-        }
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
         Collections.rotate(Arrays.asList(points), -minimum_index);
 
-        for (Point p : points) {
-            System.out.println(p);
-        }
-        System.out.println();
         Stack<Point> hull = new Stack<Point>();
         hull.push(points[0]);
         hull.push(points[1]);
@@ -41,7 +28,6 @@ public class ConvexHull extends Program {
         boolean running = true;
         while (running) {
             i = j % points.length;
-            System.out.println(hull + "  ---- " + points[i]);
             Point head = points[i];
             Point middle = hull.pop();
             Point tail = hull.peek();
@@ -49,12 +35,10 @@ public class ConvexHull extends Program {
             Point.ANGLE turn = Point.ccw(tail, middle, head);
             switch (turn) {
                 case COUNTERCLOCKWISE: //Counter Clockwise
-                    System.out.println("CounterClockwise");
                     hull.push(middle);
                     hull.push(head);
                     break;
                 case CLOCKWISE:
-                    System.out.println("Clockwise");
                     if (hull.size() < 2) {
                         hull.push(head);
                     } else {
@@ -76,23 +60,6 @@ public class ConvexHull extends Program {
         return null;
     }
 
-    public class ConvexHullThread implements Runnable {
-        private int start_index, end_index;
-
-        public ConvexHullThread(int start_index, int end_index) {
-            this.start_index = start_index;
-            this.end_index = end_index;
-        }
-
-        public void run() {
-
-            for (int i = start_index; i != end_index; i++) {
-
-            }
-        }
-
-    }
-
     class PaintingAndStroking
             extends Frame {
         private ArrayList<Point> hull;
@@ -111,23 +78,12 @@ public class ConvexHull extends Program {
             for (Point point : points) {
                 int x = getPositionX(point.x);
                 int y = getPositionY(point.y);
-//                System.out.printf("(%d, %d)\n", x, y);
-//                System.out.printf("Angle: %f\n", point.angle());
-                System.out.printf("new Point(%d, %d),\n", point.x, point.y);
-                g.drawLine(x, y, x + 5, y + 1);
+                g.drawLine(x, y, x , y );
             }
             if (hull == null) {
                 return;
             }
-//            for (int i = 1; i < points.length; i++) {
-//                g.setColor(new Color((int)((float) i * 255 / points.length), 10, 10));
-//                Point first = points[i - 1];
-//                Point last = points[i];
-//                System.out.printf("(%d, %d)\n", first.x, first.y);
-//                g.drawLine(getPositionX(first.x), getPositionY(first.y), getPositionX(last.x), getPositionY(last.y));
-//            }
             g.setColor(Color.blue);
-            System.out.println("Hull: " + hull.size());
             for (int i = 1; i < hull.size(); i++) {
 
                 Point first = hull.get(i - 1);

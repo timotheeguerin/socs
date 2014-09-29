@@ -1,8 +1,7 @@
-package program;
+package graham;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,6 +15,29 @@ public class Sorter extends Program {
     public Point[] points;
 
     private int minPartitionSize;
+
+    private int runningThreads;
+
+    protected synchronized void threadStarted() {
+        ++runningThreads;
+    }
+
+    protected synchronized void threadFinished() {
+        --runningThreads;
+    }
+
+    /**
+     * Check if the number of slave threads reporting they have finished working
+     * is equal to the number of slave threads spawned.
+     *
+     * @return True if all spawned threads have finished, false otherwise.
+     */
+    private synchronized boolean waitingForThreads() {
+        if (runningThreads == 0) {
+            return true;
+        }
+        return false;
+    }
 
 
     /**
@@ -47,6 +69,7 @@ public class Sorter extends Program {
     }
 
     /**
+     * Debug function
      * Check if an array is sorted
      *
      * @param points Points to check
@@ -54,7 +77,6 @@ public class Sorter extends Program {
     public static boolean isSorted(Point[] points) {
         for (int i = 1; i < points.length; i++) {
             if (points[i - 1].angle() > points[i].angle()) {
-                System.out.println("Error not sorted");
                 return false;
             }
         }
@@ -68,16 +90,16 @@ public class Sorter extends Program {
         }
         this.minPartitionSize = (sort_end_index - sort_start_index + 1) / thread_nb;
         executor = Executors.newFixedThreadPool(this.thread_nb);
-        Thread thread = new Thread(new SorterThread(sort_start_index, sort_end_index));
-        thread.run();
+        threadStarted();
+        executor.execute(new SorterThread(sort_start_index, sort_end_index));
+        while (!waitingForThreads()) {
+        }
+        executor.shutdown();
         try {
-            thread.join();
+            executor.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-        executor.shutdown();
         return points;
     }
 
@@ -99,12 +121,17 @@ public class Sorter extends Program {
         @Override
         public void run() {
             quicksort(start_index, end_index);
+            threadFinished();
         }
 
+        /**
+         * Quicksort recursive function
+         * @param start start
+         * @param end end
+         */
         public void quicksort(int start, int end) {
             int len = end - start + 1;
-
-            if (len <= 1)
+            if (start > end || len <= 1)
                 return;
 
             int pivot_index = medianOfThree(start, end);
@@ -125,15 +152,11 @@ public class Sorter extends Program {
             if (len > minPartitionSize) {
                 // Sort the 2 part of the array
                 // Current thread sort the right part and a new thread will sort the left
+                threadStarted();
                 SorterThread quick = new SorterThread(start, storeIndex - 1);
-                Future<?> future = executor.submit(quick);
+                executor.execute(quick);
                 quicksort(storeIndex + 1, end);
 
-                try {
-                    future.get(1000, TimeUnit.SECONDS);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
             } else {
                 quicksort(start, storeIndex - 1);
                 quicksort(storeIndex + 1, end);

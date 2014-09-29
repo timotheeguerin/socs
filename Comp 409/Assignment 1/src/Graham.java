@@ -1,50 +1,39 @@
-import program.*;
+import graham.*;
 
 /**
  * Graham
  * Created by tim on 14-09-17.
  */
 public class Graham {
-    private int q;
-    private int n;
-    private int p;
-    private Program program;
-
-    public Graham() {
-
-    }
-
     public static void main(String[] args) {
         if (args.length < 3) {
             System.err.println("Wrong number of arguments, expected 3(q, n,thread_nb)");
             return;
         }
-        Graham engine = new Graham();
-        engine.q = Integer.parseInt(args[0]);
-        engine.n = Integer.parseInt(args[1]);
-        engine.p = Integer.parseInt(args[2]);
+        int q = Integer.parseInt(args[0]);
+        int n = Integer.parseInt(args[1]);
+        int p = Integer.parseInt(args[2]);
 
         int[] thread_nbs;
         int sample_size;
-        engine.init();
         if (args.length > 3) {
-            thread_nbs = new int[]{1, 2, 4, 8, 16, 32, 64};
+            thread_nbs = new int[]{1, 2, 4, 8, 16, 32};
             sample_size = Integer.parseInt(args[3]);
-
         } else {
             thread_nbs = new int[]{Integer.parseInt(args[2])};
             sample_size = 1;
         }
 
         for (int thread_nb : thread_nbs) {
-            engine.p = thread_nb;
             long start_time, end_time;
             long sum = 0;
-            for (int i = 0; i < sample_size; i++) {
+            int total = sample_size <= 1 ? 1 : sample_size + 10;
+            for (int i = 0; i < total; i++) {
+                Program program = init(q, n, thread_nb);
                 start_time = System.currentTimeMillis();
-                engine.run();
+                program.run();
                 end_time = System.currentTimeMillis();
-                if (sample_size <= 1 || i > 0) {
+                if (sample_size <= 1 || (i > 5 && i <= sample_size + 5)) {
                     sum += end_time - start_time;
                 }
             }
@@ -52,7 +41,8 @@ public class Graham {
         }
     }
 
-    public void init() {
+    public static Program init(int q, int n, int p) {
+        Program program;
         switch (q) {
             case 1:
                 program = new CoordinatesGenerator();
@@ -74,15 +64,11 @@ public class Graham {
                 break;
             default:
                 System.err.println("Wrong value for q, should be 1,2,3 or 4!");
-                return;
+                return null;
         }
         program.n = n;
         program.thread_nb = p;
+        return program;
     }
-
-    public void run() {
-        program.run();
-    }
-
 
 }

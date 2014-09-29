@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class Sorter extends Program {
     private ExecutorService executor;
-
+    private int sort_start_index = 0;
+    private int sort_end_index = -1;
     public Point[] points;
 
     private int minPartitionSize;
@@ -27,6 +28,21 @@ public class Sorter extends Program {
         Sorter sorter = new Sorter();
         sorter.setArgs(points.length, thread_nb);
         sorter.points = points;
+        sorter.run();
+    }
+
+    /**
+     * Sort in place the given array of points from the start index to the end index
+     *
+     * @param points    Points to sort
+     * @param thread_nb Number of thread to use
+     */
+    public static void sort(Point[] points, int thread_nb, int start_index, int end_index) {
+        Sorter sorter = new Sorter();
+        sorter.setArgs(points.length, thread_nb);
+        sorter.points = points;
+        sorter.sort_start_index = start_index;
+        sorter.sort_end_index = end_index;
         sorter.run();
     }
 
@@ -47,9 +63,12 @@ public class Sorter extends Program {
 
     @Override
     public Point[] run() {
-        this.minPartitionSize = points.length / thread_nb;
+        if (sort_end_index == -1) {
+            sort_end_index = points.length - 1;
+        }
+        this.minPartitionSize = (sort_end_index - sort_start_index + 1) / thread_nb;
         executor = Executors.newFixedThreadPool(this.thread_nb);
-        Thread thread = new Thread(new SorterThread(0, points.length - 1));
+        Thread thread = new Thread(new SorterThread(sort_start_index, sort_end_index));
         thread.run();
         try {
             thread.join();
@@ -62,6 +81,11 @@ public class Sorter extends Program {
         return points;
     }
 
+    public static void swap(Object[] array, int index1, int index2) {
+        Object tmp = array[index1];
+        array[index1] = array[index2];
+        array[index2] = tmp;
+    }
 
     class SorterThread implements Runnable {
 
@@ -86,17 +110,17 @@ public class Sorter extends Program {
             int pivot_index = medianOfThree(start, end);
             Point pivotValue = points[pivot_index];
 
-            swap(pivot_index, end);
+            swap(points, pivot_index, end);
 
             int storeIndex = start;
             for (int i = start; i < end; i++) {
                 if (points[i].compareTo(pivotValue) != 1) {
-                    swap(i, storeIndex);
+                    swap(points, i, storeIndex);
                     storeIndex++;
                 }
             }
 
-            swap(storeIndex, end);
+            swap(points, storeIndex, end);
 
             if (len > minPartitionSize) {
                 // Sort the 2 part of the array
@@ -136,12 +160,6 @@ public class Sorter extends Program {
                 return end;
             }
 
-        }
-
-        private void swap(int index1, int index2) {
-            Point tmp = points[index1];
-            points[index1] = points[index2];
-            points[index2] = tmp;
         }
 
 

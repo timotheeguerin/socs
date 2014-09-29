@@ -11,6 +11,10 @@ public final class Point implements Comparable<Point> {
     public int x;
     public int y;
 
+    public enum ANGLE {
+        CLOCKWISE, COUNTERCLOCKWISE, COLINEAR
+    }
+
     @SuppressWarnings("unused")
     public Point() {
         this.x = 0;
@@ -34,7 +38,10 @@ public final class Point implements Comparable<Point> {
     }
 
     public double angle() {
-        double val = Math.atan((double) y / (double) x);
+        double val = Math.atan((double) y / (double) Math.abs(x));
+        if (x < 0) {
+            val = Math.PI - val;
+        }
         return val >= 0 ? val : 2 * Math.PI + val;
     }
 
@@ -68,6 +75,24 @@ public final class Point implements Comparable<Point> {
             return Long.compare(other.x, this.x);
         }
     }
+
+    /**
+     * Test the angle of 3 points.
+     *
+     * @param a First point
+     * @param b Middle point
+     * @param c Last point
+     * @return > 0 if counterclockwise
+     * = 0 if linear
+     * < 0 if clockwise
+     */
+    public static ANGLE ccw(Point a, Point b, Point c) {
+        double area2 = ((double) b.x - (double) a.x) * ((double) c.y - (double) a.y) - ((double) b.y - (double) a.y) * ((double) c.x - (double) a.x);
+        if (area2 < 0) return ANGLE.CLOCKWISE;
+        else if (area2 > 0) return ANGLE.COUNTERCLOCKWISE;
+        else return ANGLE.COLINEAR;
+    }
+
 
     public String toString() {
         return String.format("(%d,%d)", x, y);

@@ -24,7 +24,8 @@ public abstract class Locker {
     public abstract void unlock();
 
 
-    public void run() {
+    public int run() {
+        int max = 0;
         Thread[] threads = new Thread[thread_nb];
         LockerThread[] runnables = new LockerThread[thread_nb];
         try {
@@ -37,13 +38,16 @@ public abstract class Locker {
             for (Thread thread : threads) {
                 thread.join();
             }
+
             for (LockerThread runnable : runnables) {
-                System.out.println("Max: " + runnable.max_delay);
+                if (runnable.max_delay > max) {
+                    max = runnable.max_delay;
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        return max;
     }
 
     public class LockerThread implements Runnable {

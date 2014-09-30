@@ -11,22 +11,33 @@ public class LockBench {
             return;
         }
 
-        int q = Integer.parseInt(args[0]);
+        int arg_q = Integer.parseInt(args[0]);
         int n = Integer.parseInt(args[1]);
         int thread_nb = Integer.parseInt(args[2]);
 
-        Locker locker = null;
-        try {
-            locker = getLocker(q);
-            locker.n = n;
-            locker.thread_nb = thread_nb;
+        Locker locker;
+        int[] qs;
+        if (arg_q == -1) { //Do it for all q
+            qs = new int[]{1, 2, 3, 4};
+        } else {
+            qs = new int[]{arg_q};
+        }
+        for (int q : qs) {
+            try {
+                locker = getLocker(q);
+                locker.n = n;
+                locker.thread_nb = thread_nb;
 
-            long start_time = System.currentTimeMillis();
-            locker.run();
-            long end_time = System.currentTimeMillis();
-            System.out.println("Time: " + (end_time - start_time));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+                long start_time = System.currentTimeMillis();
+                int max = locker.run();
+                long end_time = System.currentTimeMillis();
+                System.out.println("Locker: " + q);
+                System.out.println("\tTime: " + (end_time - start_time));
+                System.out.println("\tMax: " + max);
+                System.out.println("----------------------------------");
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
     }
 

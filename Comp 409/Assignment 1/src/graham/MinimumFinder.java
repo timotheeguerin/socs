@@ -61,6 +61,7 @@ public class MinimumFinder extends Program {
             }
         }
 
+        // Get the global minimum
         int best = thread_results[0];
         for (int i = 1; i != thread_nb; i++) {
             if (points[thread_results[i]].compareByY(points[best]) == -1) {
@@ -86,7 +87,7 @@ public class MinimumFinder extends Program {
                     best = i;
                 }
             }
-            thread_results[thread_index] = best;
+            thread_results[thread_index] = best; //Store local minimum into the thread reserved spot
         }
     }
 }

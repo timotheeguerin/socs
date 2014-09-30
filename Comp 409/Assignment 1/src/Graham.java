@@ -16,6 +16,8 @@ public class Graham {
 
         int[] thread_nbs;
         int sample_size;
+
+        //Added a 4th optional argument that correspond to a sample size for benchmarking
         if (args.length > 3) {
             thread_nbs = new int[]{1, 2, 4, 8, 16, 32};
             sample_size = Integer.parseInt(args[3]);
@@ -23,11 +25,12 @@ public class Graham {
             thread_nbs = new int[]{Integer.parseInt(args[2])};
             sample_size = 1;
         }
-
+        //For each thread number(Only p if no 4th argument)
         for (int thread_nb : thread_nbs) {
             long start_time, end_time;
             long sum = 0;
             int total = sample_size <= 1 ? 1 : sample_size + 10;
+            //Try each program total times(Once only if no 4th argument)
             for (int i = 0; i < total; i++) {
                 Program program = init(q, n, thread_nb);
                 start_time = System.currentTimeMillis();

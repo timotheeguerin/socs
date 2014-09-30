@@ -14,10 +14,5 @@ public abstract class Program {
 
     }
 
-    public void copyArgsFrom(Program other) {
-        this.n = other.n;
-        this.thread_nb = other.thread_nb;
-    }
-
     public abstract Object run();
 }

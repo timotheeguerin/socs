@@ -18,8 +18,12 @@ public class ConvexHull extends Program {
     public Object run() {
         Sorter.sort(points, thread_nb); //Sort the remaining of the array
         int minimum_index = MinimumFinder.findMinimumIndex(points, thread_nb);
+        //Rotate the array so it's sorted relative to the minimum point.
         Collections.rotate(Arrays.asList(points), -minimum_index);
 
+        //Graham scan algorithm
+        // I made the algorithm before noticing we were only supposed to use a fixed time
+        // As this algorithm is not using thread the time used on average should be fixed.
         Stack<Point> hull = new Stack<Point>();
         hull.push(points[0]);
         hull.push(points[1]);
@@ -45,7 +49,7 @@ public class ConvexHull extends Program {
                         j--;
                     }
                     break;
-                case COLINEAR:
+                case COLLINEAR:
                     hull.push(head);
                     break;
             }
@@ -56,6 +60,7 @@ public class ConvexHull extends Program {
             }
         }
         hull.push(hull.get(0));
+        //Display the convex hul
         new PaintingAndStroking(hull);
         return null;
     }
@@ -78,7 +83,7 @@ public class ConvexHull extends Program {
             for (Point point : points) {
                 int x = getPositionX(point.x);
                 int y = getPositionY(point.y);
-                g.drawLine(x, y, x , y );
+                g.drawLine(x, y, x, y);
             }
             if (hull == null) {
                 return;

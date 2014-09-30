@@ -12,7 +12,7 @@ public final class Point implements Comparable<Point> {
     public int y;
 
     public enum ANGLE {
-        CLOCKWISE, COUNTERCLOCKWISE, COLINEAR
+        CLOCKWISE, COUNTERCLOCKWISE, COLLINEAR
     }
 
     @SuppressWarnings("unused")
@@ -90,7 +90,7 @@ public final class Point implements Comparable<Point> {
         double area2 = ((double) b.x - (double) a.x) * ((double) c.y - (double) a.y) - ((double) b.y - (double) a.y) * ((double) c.x - (double) a.x);
         if (area2 < 0) return ANGLE.CLOCKWISE;
         else if (area2 > 0) return ANGLE.COUNTERCLOCKWISE;
-        else return ANGLE.COLINEAR;
+        else return ANGLE.COLLINEAR;
     }
 
 

@@ -17,27 +17,13 @@ public class SimpleTTASLocker extends Locker {
     public int lock() {
         boolean acquired = false;
         while (!acquired) {
-            /* First test the lock without invalidating
-               any cache lines. */
+            // First test the lock without invalidating any cache lines.
             if (!locked.get()) {
-                /* Attempt to lock the lock with an atomic CAS. */
+                // Attempt to lock the lock with an atomic CAS
                 acquired = locked.compareAndSet(false, true);
             }
         }
-        lock_granted++;
-        return lock_granted;
-    }
-
-    /**
-     * Locks the lock if available. This will not
-     * block.
-     */
-    public boolean tryLock() {
-        if (locked.get()) {
-            return false;
-        }
-
-        return locked.compareAndSet(false, true);
+        return ++lock_granted;
     }
 
     /**

@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class DelayTTASLocker extends Locker {
     private AtomicBoolean locked = new AtomicBoolean(false);
-    private long WAIT_CONST = 52;
+    private static final long WAIT_CONST = 52;
 
     /**
      * Locks the lock.
@@ -29,6 +29,7 @@ public class DelayTTASLocker extends Locker {
             } else {
                 fail++;
                 try {
+                    //Sleep a random amount of time k * WAIT_CONST were k=rand(0,2^fail-1)
                     Thread.sleep(WAIT_CONST * rand.nextInt((int) Math.pow(2, fail) - 1));
                 } catch (InterruptedException e) {
                     e.printStackTrace();

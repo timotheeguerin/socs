@@ -1,8 +1,5 @@
 package lock;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Parent class for each locker
  * Created by tim on 14-09-29.
@@ -11,12 +8,13 @@ public abstract class Locker {
     public int thread_nb;
     public int n;
 
-    protected Constructor thread_constructor;
     protected int lock_granted = 0;
 
 
     /**
      * Acquires the lock.
+     *
+     * @return -1 if the lock was not granted or the total number of granted locks
      */
     public abstract int lock();
 

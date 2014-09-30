@@ -37,13 +37,13 @@ public class LockBench {
                 locker = new SynchronizedLock();
                 break;
             case 2:
-                locker = null;
+                locker = new SimpleTTASLocker();
                 break;
             case 3:
-                locker = null;
+                locker = new DelayTTASLocker();
                 break;
             case 4:
-                locker = null;
+                locker = new CLHLocker();
                 break;
             default:
                 return null;

@@ -7,20 +7,19 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by tim on 14-09-29.
  */
 public class CLHLocker extends Locker {
-
-    AtomicReference<QNode> tail = new AtomicReference<QNode>(new QNode());
-    ThreadLocal<QNode> myPred;
-    ThreadLocal<QNode> myNode;
+    private final ThreadLocal<Node> pred;
+    private final ThreadLocal<Node> node;
+    private final AtomicReference<Node> tail = new AtomicReference<Node>(new Node());
 
     public CLHLocker() {
-        tail = new AtomicReference<QNode>(new QNode());
-        myNode = new ThreadLocal<QNode>() {
-            protected QNode initialValue() {
-                return new QNode();
+        this.node = new ThreadLocal<Node>() {
+            protected Node initialValue() {
+                return new Node();
             }
         };
-        myPred = new ThreadLocal<QNode>() {
-            protected QNode initialValue() {
+
+        this.pred = new ThreadLocal<Node>() {
+            protected Node initialValue() {
                 return null;
             }
         };
@@ -28,11 +27,10 @@ public class CLHLocker extends Locker {
 
     @Override
     public int lock() {
-        System.out.println("Request lock: " + lock_granted);
-        QNode qnode = myNode.get();
-        qnode.locked = true;
-        QNode pred = tail.getAndSet(qnode);
-        myPred.set(pred);
+        final Node node = this.node.get();
+        node.locked = true;
+        Node pred = this.tail.getAndSet(node);
+        this.pred.set(pred);
         while (pred.locked) {
         }
         return ++lock_granted;
@@ -41,12 +39,12 @@ public class CLHLocker extends Locker {
 
     @Override
     public void unlock() {
-        QNode qnode = myNode.get();
-        qnode.locked = false;
-        myNode.set(myPred.get());
+        final Node node = this.node.get();
+        node.locked = false;
+        this.node.set(this.pred.get());
     }
 
-    private class QNode {
-        public boolean locked = false;
+    private class Node {
+        public volatile boolean locked = false;
     }
 }

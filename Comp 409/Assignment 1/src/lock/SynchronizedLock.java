@@ -20,6 +20,9 @@ public class SynchronizedLock extends Locker {
      */
     @Override
     public synchronized int lock() {
+        if(locked) {
+            return -1; //We need to return as the synchronized lock the entire object
+        }
         locked = true;
         lock_granted += 1;
         return lock_granted;

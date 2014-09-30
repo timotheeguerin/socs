@@ -58,12 +58,16 @@ public abstract class Locker {
             int new_counter;
             max_delay = 0;
             for (int i = 0; i < n; i++) {
-                new_counter = lock();
-                Thread.yield();
+                new_counter = -1;
+                while (new_counter == -1) {  //Until we are granted the lock yield then try again(For synchronized)
+                    new_counter = lock();
+                    Thread.yield();
+                }
                 unlock();
                 Thread.yield();
-                if (new_counter - last_counter > max_delay) {
-                    max_delay = new_counter - last_counter;
+                int new_delay = new_counter - last_counter - 1;
+                if (new_delay > max_delay) { //Get the number of thread who requested a lock since the last time we got one
+                    max_delay = new_delay;
                 }
                 last_counter = new_counter;
             }

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by tim on 14-09-29.
  */
 public class CLHLocker extends Locker {
-    private final ThreadLocal<Node> pred;
+    private final ThreadLocal<Node> prev;
     private final ThreadLocal<Node> node;
     private final AtomicReference<Node> tail = new AtomicReference<Node>(new Node());
 
@@ -18,7 +18,7 @@ public class CLHLocker extends Locker {
             }
         };
 
-        this.pred = new ThreadLocal<Node>() {
+        this.prev = new ThreadLocal<Node>() {
             protected Node initialValue() {
                 return null;
             }
@@ -29,9 +29,8 @@ public class CLHLocker extends Locker {
     public int lock() {
         final Node node = this.node.get();
         node.locked = true;
-        Node pred = this.tail.getAndSet(node);
-        this.pred.set(pred);
-        while (pred.locked) {
+        node.prev = this.tail.getAndSet(node);
+        while (node.prev.locked) {
         }
         return ++lock_granted;
     }
@@ -41,10 +40,11 @@ public class CLHLocker extends Locker {
     public void unlock() {
         final Node node = this.node.get();
         node.locked = false;
-        this.node.set(this.pred.get());
+        this.node.set(node.prev);
     }
 
     private class Node {
         public volatile boolean locked = false;
+        public Node prev;
     }
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main
@@ -9,22 +10,24 @@ public class Main
         List<String> messages = new ArrayList<String>();
         messages.add("Bob this is Mary");
         messages.add("Download data file now");
-        //        System.out.println(Cryptography.hash(messages));
-        //        System.out.println(Cryptography.hash2(messages));
-        //        Cryptography.gridTransposition(messages);
+//        System.out.println(Cryptography.hash(messages));
+//        System.out.println(Cryptography.hash2(messages));
+        System.out.println(Arrays.toString(Cryptography.privatePublicEncrypt(messages)));
+        System.out.println(Cryptography.privatePublicDecrypt(Cryptography.privatePublicEncrypt(messages)));
+//        System.out.println(Cryptography.gridTransposition(messages));
 
-        for (int i = 1; i < 100; i++)
-        {
-            int n = 50 * i + 1;
-            if (!isPrime(n))
-            {
-                List<Integer> factors = primeFactors(n);
-                if (factors.size() > 3)
-                {
-                    System.out.println(n + "    -    " + factors);
-                }
-            }
-        }
+        //        for (int i = 1; i < 100; i++)
+        //        {
+        //            int n = 50 * i + 1;
+        //            if (!isPrime(n))
+        //            {
+        //                List<Integer> factors = primeFactors(n);
+        //                if (factors.size() > 3)
+        //                {
+        //                    System.out.println(n + "    -    " + factors);
+        //                }
+        //            }
+        //        }
     }
 
     static boolean isPrime(int n)

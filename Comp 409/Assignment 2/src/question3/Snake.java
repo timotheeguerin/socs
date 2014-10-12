@@ -20,9 +20,8 @@ public class Snake {
     private SnakeThread[] snakes;
 
     public static void main(String[] args) {
-        Snake snake = new Snake(5, 5, 20, 1000);
+        Snake snake = new Snake(15, 15, 20, 1000);
         snake.run();
-
     }
 
     public Snake(int snake_nb, int snake_size, int grid_size, int waiting_time) {
@@ -34,8 +33,6 @@ public class Snake {
         for (int i = 0; i < grid_size; i++) {
             grid[i] = new AtomicIntegerArray(grid_size);
         }
-
-
     }
 
     public void run() {
@@ -75,7 +72,6 @@ public class Snake {
         for (Thread thread : threads) {
             thread.interrupt();
         }
-
     }
 
     class PaintingAndStroking extends Frame {
@@ -99,7 +95,12 @@ public class Snake {
                 g.setColor(new Color(50, 50, 50));
                 for (Point p : snake.queue) {
                     if (count >= snake_size - 1) {
-                        g.setColor(new Color(50, 50, 200));
+                        if(snake.locked) {
+                            g.setColor(new Color(200, 50, 50));
+                        }
+                        else {
+                            g.setColor(new Color(50, 50, 200));
+                        }
                     }
                     g.fillRect(p.x * 10 + OFFSET_X, p.y * 10 + OFFSET_Y, 10, 10);
                     count++;
@@ -116,7 +117,7 @@ public class Snake {
         public SnakeThread(int row) {
             for (int i = 0; i < snake_size; i++) {
                 grid[row].set(i, 1);
-                queue.add(new Point(row, 1));
+                queue.add(new Point(row, i));
             }
         }
 
@@ -142,7 +143,6 @@ public class Snake {
                 try {
                     Thread.sleep(waiting_time);
                 } catch (InterruptedException e) {
-                    //Ignore thread terminated
                     return;
                 }
             }

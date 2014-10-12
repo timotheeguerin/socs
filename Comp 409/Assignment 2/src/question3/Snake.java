@@ -19,7 +19,7 @@ public class Snake {
     private SnakeThread[] snakes;
 
     public static void main(String[] args) {
-        Snake snake = new Snake(1, 20, 140, 50);
+        Snake snake = new Snake(100, 8, 140, 10);
         snake.run();
     }
 
@@ -71,6 +71,11 @@ public class Snake {
         for (Thread thread : threads) {
             thread.interrupt();
         }
+        int i = 1;
+        for (SnakeThread snake : snakes) {
+            System.out.printf("Snake %d moved: %d\n", i, snake.moves);
+            i++;
+        }
     }
 
     class PaintingAndStroking extends Frame {
@@ -95,7 +100,7 @@ public class Snake {
         }
 
         public void paint(Graphics g) {
-            if(colors == null) {
+            if (colors == null) {
                 return;
             }
             g.drawRect(OFFSET_X, OFFSET_Y, CELL_SIZE * grid_size, CELL_SIZE * grid_size);
@@ -121,6 +126,7 @@ public class Snake {
 
     class SnakeThread implements Runnable {
 
+        private int moves = 0;
         private boolean locked = false;
         private Queue<Point> queue = new ArrayDeque<Point>();
 
@@ -143,6 +149,7 @@ public class Snake {
                         grid[lastPoint.x].set(lastPoint.y, 0);
                         found = true;
                         locked = false;
+                        moves++;
                         break;
                     }
                 }

@@ -1,7 +1,6 @@
 package question3;
 
 import java.awt.*;
-import java.awt.List;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
@@ -20,7 +19,7 @@ public class Snake {
     private SnakeThread[] snakes;
 
     public static void main(String[] args) {
-        Snake snake = new Snake(120, 10, 140, 50);
+        Snake snake = new Snake(1, 20, 140, 50);
         snake.run();
     }
 
@@ -89,13 +88,16 @@ public class Snake {
 
             Random rand = new Random();
             colors = new Color[snake_nb];
-            for (int i = 0; i < snake_nb; i++) {
+            for (int i = 0; i < snakes.length; i++) {
 
                 colors[i] = new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
             }
         }
 
         public void paint(Graphics g) {
+            if(colors == null) {
+                return;
+            }
             g.drawRect(OFFSET_X, OFFSET_Y, CELL_SIZE * grid_size, CELL_SIZE * grid_size);
             int snake_id = 0;
             for (SnakeThread snake : snakes) {

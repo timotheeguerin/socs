@@ -20,7 +20,7 @@ public class Snake {
     private SnakeThread[] snakes;
 
     public static void main(String[] args) {
-        Snake snake = new Snake(15, 15, 20, 1000);
+        Snake snake = new Snake(120, 10, 140, 50);
         snake.run();
     }
 
@@ -75,36 +75,44 @@ public class Snake {
     }
 
     class PaintingAndStroking extends Frame {
-        int FRAME_X = 600;
-        int FRAME_Y = 400;
+        int FRAME_X = 1000;
+        int FRAME_Y = 750;
         int OFFSET_X = 10;
-        int OFFSET_Y = 100;
-        int CELL_SIZE = 10;
+        int OFFSET_Y = 30;
+        int CELL_SIZE = 5;
+        private Color[] colors;
 
         public PaintingAndStroking() {
             setTitle("PaintingAndStroking v1.0");
             setSize(FRAME_X, FRAME_Y);
             setVisible(true);
+
+            Random rand = new Random();
+            colors = new Color[snake_nb];
+            for (int i = 0; i < snake_nb; i++) {
+
+                colors[i] = new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+            }
         }
 
         public void paint(Graphics g) {
             g.drawRect(OFFSET_X, OFFSET_Y, CELL_SIZE * grid_size, CELL_SIZE * grid_size);
-
+            int snake_id = 0;
             for (SnakeThread snake : snakes) {
                 int count = 0;
-                g.setColor(new Color(50, 50, 50));
+                g.setColor(colors[snake_id]);
                 for (Point p : snake.queue) {
                     if (count >= snake_size - 1) {
-                        if(snake.locked) {
+                        if (snake.locked) {
                             g.setColor(new Color(200, 50, 50));
-                        }
-                        else {
+                        } else {
                             g.setColor(new Color(50, 50, 200));
                         }
                     }
-                    g.fillRect(p.x * 10 + OFFSET_X, p.y * 10 + OFFSET_Y, 10, 10);
+                    g.fillRect(p.x * CELL_SIZE + OFFSET_X, p.y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE);
                     count++;
                 }
+                snake_id++;
             }
         }
     }

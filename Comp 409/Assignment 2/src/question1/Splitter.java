@@ -2,7 +2,6 @@ package question1;
 
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
@@ -146,6 +145,7 @@ public class Splitter {
         public void run() {
             while (true) {
                 try {
+                    //Until we don't need to wait
                     while (waiting.get()) {
                         synchronized (this) {
                             wait();
@@ -174,7 +174,7 @@ public class Splitter {
                             }
                         }
                     }
-                    waiting.set(true);
+                    waiting.set(true); // Now waiting again.
                 } catch (InterruptedException e) {
                     return;
                 }

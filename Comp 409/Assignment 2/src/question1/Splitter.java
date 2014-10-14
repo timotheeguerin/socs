@@ -1,6 +1,5 @@
 package question1;
 
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
@@ -14,8 +13,8 @@ public class Splitter {
 
     private int thread_nb;
     private int n;
-    private int[][] idGrid;
-    private AtomicIntegerArray[] grid;
+    private int[][] grid;
+    private AtomicIntegerArray[] lockGrid;
     private AtomicIntegerArray idCount;
     private CountDownLatch latch;
 
@@ -43,7 +42,7 @@ public class Splitter {
         for (int i = 0; i < splitter.thread_nb; i++) {
             System.out.print("\t");
             for (int j = 0; j < splitter.thread_nb - i; j++) {
-                System.out.print(splitter.idGrid[i][j] + " ");
+                System.out.print(splitter.grid[i][j] + " ");
             }
             System.out.println();
         }
@@ -54,7 +53,7 @@ public class Splitter {
         for (int i = 0; i < splitter.thread_nb; i++) {
             System.out.print("\t");
             for (int j = 0; j < splitter.thread_nb - i; j++) {
-                System.out.print(splitter.idCount.get(splitter.idGrid[i][j]) + " ");
+                System.out.print(splitter.idCount.get(splitter.grid[i][j]) + " ");
             }
             System.out.println();
         }
@@ -66,52 +65,62 @@ public class Splitter {
     public Splitter(int thread_nb, int n) {
         this.thread_nb = thread_nb;
         this.n = n;
-        grid = new AtomicIntegerArray[thread_nb];
-        idGrid = new int[thread_nb][thread_nb];
+        lockGrid = new AtomicIntegerArray[thread_nb];
+        grid = new int[thread_nb][thread_nb];
 
         int count = 1;
         for (int i = 0; i < thread_nb; i++) {
 
             for (int j = 0; j < thread_nb - i; j++) {
-                idGrid[i][j] = count;
+                grid[i][j] = count;
                 count++;
             }
         }
         idCount = new AtomicIntegerArray(count);
     }
 
+    /**
+     * Reset the locking grid
+     * Set all values to 0
+     */
     private void resetGrid() {
         for (int i = 0; i < thread_nb; i++) {
-            grid[i] = new AtomicIntegerArray(thread_nb - i);
+            lockGrid[i] = new AtomicIntegerArray(thread_nb - i);
             for (int j = 0; j < thread_nb - i; j++) {
-                grid[i].set(j, 0);
+                lockGrid[i].set(j, 0);
             }
         }
     }
 
 
     public void run() {
-        LinkedList<SplitterThread> threads = new LinkedList<SplitterThread>();
+        //Create threads
+        SplitterThread[] threads = new SplitterThread[thread_nb];
         for (int i = 0; i < thread_nb; i++) {
-            threads.add(new SplitterThread());
+            threads[i] = new SplitterThread();
         }
 
-        for (Thread thread : threads) {
-            thread.start();
-        }
+        //Start threads
+        for (Thread thread : threads) thread.start();
 
+        //Start renaming rounds
         for (int renaming_round = 0; renaming_round < n; renaming_round++) {
+            //Reset locking grid
             resetGrid();
+            //Create a countdown latch to keep track of thread that still in the process of renaming
             latch = new CountDownLatch(thread_nb);
+            //Notify the threads they can start renaming
             for (SplitterThread thread : threads) {
                 thread.semaphore.release();
             }
             try {
-                latch.await();
+                latch.await(); // Wait for all threads to finish renaming
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        //We have finished all rounds so we terminate the threads
         for (Thread thread : threads) {
             thread.interrupt();
         }
@@ -121,6 +130,8 @@ public class Splitter {
         private int id = -1;
         private Random rand = new Random();
 
+        // Semaphore to keep the thread waiting between renaming rounds
+        // Using wait and notify can fail if notify is being called before wait.
         private Semaphore semaphore = new Semaphore(1);
 
         public SplitterThread() {
@@ -140,13 +151,18 @@ public class Splitter {
                     //Mean we have been notified(We can start renaming the thread)
                     int i = 0;
                     int j = 0;
+                    // Until the thread found a valid id it continues
                     while (true) {
-                        if (grid[i].compareAndSet(j, 0, 1)) {
-                            id = idGrid[i][j];
+                        //If found a unused id flag it as locked
+                        if (lockGrid[i].compareAndSet(j, 0, 1)) {
+                            //Register id
+                            id = grid[i][j];
                             idCount.incrementAndGet(id);
+                            //Tell the latchCountDown that this thread is finished with renaming
                             latch.countDown();
                             break;
                         } else {
+                            // If id is already used go randomly down or right
                             if (rand.nextFloat() < 0.5) {
                                 i++;
                             } else {

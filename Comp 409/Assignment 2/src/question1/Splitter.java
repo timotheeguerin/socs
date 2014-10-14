@@ -1,6 +1,5 @@
 package question1;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -21,23 +20,39 @@ public class Splitter {
     private CountDownLatch latch;
 
     public static void main(String[] args) {
-        Splitter splitter = new Splitter(4, 1);
+        if (args.length < 2) {
+            System.out.println("Missing arguments: expecting 2 (thread number, number of run)");
+        }
+
+        int p = Integer.parseInt(args[0]);
+        int n = Integer.parseInt(args[1]);
+
+        //Run
+        Splitter splitter = new Splitter(p, n);
         splitter.run();
-        System.out.println(splitter.idCount);
+
+        //Display results
         int sum = 0;
         for (int i = 0; i < splitter.idCount.length(); i++) {
             sum += splitter.idCount.get(i);
         }
 
+        System.out.println("----------------------------------------");
+        System.out.println(" Grid ids:");
+        System.out.println("----------------------------------------");
         for (int i = 0; i < splitter.thread_nb; i++) {
-
+            System.out.print("\t");
             for (int j = 0; j < splitter.thread_nb - i; j++) {
                 System.out.print(splitter.idGrid[i][j] + " ");
             }
             System.out.println();
         }
+        System.out.println();
+        System.out.println("----------------------------------------");
+        System.out.println(" Grid hits");
         System.out.println("----------------------------------------");
         for (int i = 0; i < splitter.thread_nb; i++) {
+            System.out.print("\t");
             for (int j = 0; j < splitter.thread_nb - i; j++) {
                 System.out.print(splitter.idCount.get(splitter.idGrid[i][j]) + " ");
             }
@@ -89,11 +104,7 @@ public class Splitter {
             resetGrid();
             latch = new CountDownLatch(thread_nb);
             for (SplitterThread thread : threads) {
-                System.out.println("releasing");
                 thread.semaphore.release();
-//                synchronized (thread) {
-//                    thread.notify();
-//                }
             }
             try {
                 latch.await();
@@ -114,7 +125,7 @@ public class Splitter {
 
         public SplitterThread() {
             try {
-                semaphore.acquire();
+                semaphore.acquire(); // Need a first acquire or it run before we need to start
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -124,16 +135,12 @@ public class Splitter {
         public void run() {
             while (true) {
                 try {
-//                    synchronized (this) {
-//                        wait();
-//                    }
+                    semaphore.acquire(); //Wait for main tread to release the semaphore
 
-                    semaphore.acquire();
-                    //Mean we have been notified(Rename the thread)
+                    //Mean we have been notified(We can start renaming the thread)
                     int i = 0;
                     int j = 0;
                     while (true) {
-                        System.out.println(Arrays.toString(grid));
                         if (grid[i].compareAndSet(j, 0, 1)) {
                             id = idGrid[i][j];
                             idCount.incrementAndGet(id);

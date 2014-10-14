@@ -19,7 +19,15 @@ public class Snake {
     private SnakeThread[] snakes;
 
     public static void main(String[] args) {
-        Snake snake = new Snake(100, 8, 140, 10);
+        if (args.length < 4) {
+            System.out.println("Error missing arguments: expecting 4.");
+            return;
+        }
+        int snake_nb = Integer.parseInt(args[0]);
+        int snake_len = Integer.parseInt(args[1]);
+        int grid_size = Integer.parseInt(args[2]);
+        int t = Integer.parseInt(args[3]);
+        Snake snake = new Snake(snake_nb, snake_len, grid_size, t);
         snake.run();
     }
 
@@ -36,17 +44,16 @@ public class Snake {
 
     public void run() {
         snakes = new SnakeThread[snake_nb];
-        Thread[] threads = new Thread[snake_nb];
         for (int i = 0; i < snake_nb; i++) {
             snakes[i] = new SnakeThread(i);
-            threads[i] = new Thread(snakes[i]);
         }
 
-        for (Thread thread : threads) {
+        for (SnakeThread thread : snakes) {
             thread.start();
         }
         long start_time = System.currentTimeMillis();
         PaintingAndStroking paint = new PaintingAndStroking();
+        //Run for 1min
         while (System.currentTimeMillis() - start_time <= 1000 * 60) {
             boolean all_locked = true;
 
@@ -56,19 +63,22 @@ public class Snake {
                     break;
                 }
             }
+
+            // If all snakes are locked then we stop
             if (all_locked) {
                 System.out.println("All locked");
                 break;
             }
+            //Display the snake
             paint.repaint();
             try {
-                Thread.sleep(waiting_time / 4);
+                Thread.sleep(waiting_time / 4); //Sleep for t/4
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        for (Thread thread : threads) {
+        for (SnakeThread thread : snakes) {
             thread.interrupt();
         }
         int i = 1;
@@ -78,6 +88,84 @@ public class Snake {
         }
     }
 
+
+    class SnakeThread extends Thread {
+
+        private int moves = 0;
+        private boolean locked = false;
+        private Queue<Point> queue = new ArrayDeque<Point>();
+
+        public SnakeThread(int row) {
+            for (int i = 0; i < snake_size; i++) {
+                grid[row].set(i, 1);
+                queue.add(new Point(row, i));
+            }
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                ArrayList<Point> list = getNextPositionList();
+                boolean found = false;
+                //Go through each potential positions
+                for (Point next : list) {
+                    //If we can go to this position then move
+                    if (grid[next.x].compareAndSet(next.y, 0, 1)) {
+                        queue.add(next);
+                        //Remove the queue of the snake and update the grid correspondingly
+                        Point lastPoint = queue.remove();
+                        grid[lastPoint.x].set(lastPoint.y, 0);
+                        found = true;
+                        locked = false; //We are not blocked anymore(if we were before)
+                        moves++;
+                        break;
+                    }
+                }
+                // If the snake has not found a valid position then its marked as blocked
+                if (!found) {
+                    locked = true;
+                }
+                try {
+                    Thread.sleep(waiting_time);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        }
+
+        /**
+         * Get the list of next potential positions for the snake
+         * It return 3 positions(NORTH, EAST, SOUTH, WEST) excluding the position used by the snake body before head)
+         *
+         * @return list of points with the index of the positions
+         */
+        private ArrayList<Point> getNextPositionList() {
+            ArrayList<Point> list = new ArrayList<Point>();
+            ArrayList<Point> snakePos = new ArrayList<Point>(queue);
+            Point head = snakePos.get(snakePos.size() - 1);
+            Point beforeHead = snakePos.get(snakePos.size() - 2);
+            list.add(new Point(head.x, head.y + 1));
+            list.add(new Point(head.x, head.y - 1));
+            list.add(new Point(head.x + 1, head.y));
+            list.add(new Point(head.x - 1, head.y));
+
+            ArrayList<Point> results = new ArrayList<Point>();
+            for (Point pos : list) {
+                if (!pos.equals(beforeHead)) {
+                    Point point = new Point();
+                    point.x = (((pos.x % grid_size) + grid_size) % grid_size); // Modulo for negative number
+                    point.y = (((pos.y % grid_size) + grid_size) % grid_size);
+                    results.add(point);
+                }
+            }
+            Collections.shuffle(results);
+            return results;
+        }
+    }
+
+    /**
+     * Display class
+     */
     class PaintingAndStroking extends Frame {
         int FRAME_X = 1000;
         int FRAME_Y = 750;
@@ -108,84 +196,23 @@ public class Snake {
             for (SnakeThread snake : snakes) {
                 int count = 0;
                 g.setColor(colors[snake_id]);
-                for (Point p : snake.queue) {
-                    if (count >= snake_size - 1) {
-                        if (snake.locked) {
-                            g.setColor(new Color(200, 50, 50));
-                        } else {
-                            g.setColor(new Color(50, 50, 200));
-                        }
-                    }
-                    g.fillRect(p.x * CELL_SIZE + OFFSET_X, p.y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE);
-                    count++;
-                }
-                snake_id++;
-            }
-        }
-    }
-
-    class SnakeThread implements Runnable {
-
-        private int moves = 0;
-        private boolean locked = false;
-        private Queue<Point> queue = new ArrayDeque<Point>();
-
-        public SnakeThread(int row) {
-            for (int i = 0; i < snake_size; i++) {
-                grid[row].set(i, 1);
-                queue.add(new Point(row, i));
-            }
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                ArrayList<Point> list = getNextPositionList();
-                boolean found = false;
-                for (Point next : list) {
-                    if (grid[next.x].compareAndSet(next.y, 0, 1)) {
-                        queue.add(next);
-                        Point lastPoint = queue.remove();
-                        grid[lastPoint.x].set(lastPoint.y, 0);
-                        found = true;
-                        locked = false;
-                        moves++;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    locked = true;
-                }
                 try {
-                    Thread.sleep(waiting_time);
-                } catch (InterruptedException e) {
-                    return;
+                    for (Point p : snake.queue) {
+                        if (count >= snake_size - 1) {
+                            if (snake.locked) {
+                                g.setColor(new Color(200, 50, 50));
+                            } else {
+                                g.setColor(new Color(50, 50, 200));
+                            }
+                        }
+                        g.fillRect(p.x * CELL_SIZE + OFFSET_X, p.y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE);
+                        count++;
+                    }
+                    snake_id++;
+                } catch (ConcurrentModificationException ignored) {
+
                 }
             }
-        }
-
-        private ArrayList<Point> getNextPositionList() {
-            ArrayList<Point> list = new ArrayList<Point>();
-            ArrayList<Point> snakePos = new ArrayList<Point>(queue);
-            Point head = snakePos.get(snakePos.size() - 1);
-            Point beforeHead = snakePos.get(snakePos.size() - 2);
-            list.add(new Point(head.x, head.y + 1));
-            list.add(new Point(head.x, head.y - 1));
-            list.add(new Point(head.x + 1, head.y));
-            list.add(new Point(head.x - 1, head.y));
-
-            ArrayList<Point> results = new ArrayList<Point>();
-            for (Point pos : list) {
-                if (!pos.equals(beforeHead)) {
-                    Point point = new Point();
-                    point.x = (((pos.x % grid_size) + grid_size) % grid_size); // Modulo for negative number
-                    point.y = (((pos.y % grid_size) + grid_size) % grid_size);
-                    results.add(point);
-                }
-            }
-            Collections.shuffle(results);
-            return results;
         }
     }
 }

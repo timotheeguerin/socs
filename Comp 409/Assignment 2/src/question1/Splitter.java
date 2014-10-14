@@ -3,6 +3,7 @@ package question1;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
@@ -111,7 +112,10 @@ public class Splitter {
             latch = new CountDownLatch(thread_nb);
             //Notify the threads they can start renaming
             for (SplitterThread thread : threads) {
-                thread.semaphore.release();
+                thread.waiting.set(false);
+                synchronized (thread) {
+                    thread.notify();
+                }
             }
             try {
                 latch.await(); // Wait for all threads to finish renaming
@@ -129,24 +133,24 @@ public class Splitter {
     class SplitterThread extends Thread {
         private int id = -1;
         private Random rand = new Random();
+        private AtomicBoolean waiting = new AtomicBoolean();
 
         // Semaphore to keep the thread waiting between renaming rounds
         // Using wait and notify can fail if notify is being called before wait.
-        private Semaphore semaphore = new Semaphore(1);
 
         public SplitterThread() {
-            try {
-                semaphore.acquire(); // Need a first acquire or it run before we need to start
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waiting.set(true);
         }
 
         @Override
         public void run() {
             while (true) {
                 try {
-                    semaphore.acquire(); //Wait for main tread to release the semaphore
+                    while (waiting.get()) {
+                        synchronized (this) {
+                            wait();
+                        }
+                    }
 
                     //Mean we have been notified(We can start renaming the thread)
                     int i = 0;
@@ -170,6 +174,7 @@ public class Splitter {
                             }
                         }
                     }
+                    waiting.set(true);
                 } catch (InterruptedException e) {
                     return;
                 }

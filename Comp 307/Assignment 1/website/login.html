@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Title of the document</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css?time=@Environment.TickCount">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css?time=@Environment.TickCount">
+</head>
+
+<body>
+	<div class='content'>
+		<div class='form' >
+			<h1> Log in </h1>
+
+			<form action='login.pl' method='post'>
+				<input name='username' placeholder='Username'/>
+				<input name='password' placeholder='Password'/>
+				<input type='submit' value='Log in'/>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -23,6 +23,10 @@ Thumbs.db
 *.tmp
 *.bak
 *~
+
 *.zip
 *.class
 
+#Osx doc files
+*.pages
+*.numbers

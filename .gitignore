@@ -30,3 +30,6 @@ Thumbs.db
 #Osx doc files
 *.pages
 *.numbers
+
+
+slides/

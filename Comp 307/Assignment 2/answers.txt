@@ -1,0 +1,17 @@
+Comp 307 - Assignment 2 - Q1 - Project
+
+Team: Andrew Gowing, Timothee Guerin, Alexandre Olivier (Beloved Leader)
+
+Description: We would like to create a website that recommends recipes according to the ingredients a user would like to use. The main idea is to have a drag and drop interface with icons corresponding to ingredients and drop those icons in some kind of kitchen/pot/pan or something else. Then, the website would provide a list of recipes using only those ingredients.
+
+Technology: To do so, we will be using the following 4 technologies.
+	MySQL for the ingredients and recipe database
+HTML 5+CSS
+Javascript
+Rails (If allowed of course)
+
+
+
+
+Question 2:
+Website url: http://cs.mcgill.ca/~tgueri/comp307/a2/

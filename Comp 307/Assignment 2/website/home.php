@@ -1,9 +1,9 @@
-<?php 
+<?php
 	require 'application.php';
 	if(!isset($_GET['username']) or !isset($_GET['session_id'])) {
 		header('Location: index.php');
 		die();
-	} 
+	}
 
 	$user = get_user($_GET['username']);
 	$session = get_session($user['id']);
@@ -34,7 +34,7 @@
 			<hr>
 			<br>
 			<div class='logout-container'>
-				<a class='link' href='logout.php?user_id=<?= $user_id ?>&session_id=<?= $session_id ?>' title='Logout'>
+				<a class='link' href='logout.php?user_id=<?= $user['id'] ?>&session_id=<?= $session_id ?>' title='Logout'>
 					<div>
 						<i class='fa fa-sign-out'></i>
 					</div>
@@ -48,4 +48,3 @@
 </body>
 
 </html>
-

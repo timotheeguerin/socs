@@ -44,6 +44,8 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
+#define ACTION_PER_OP_THREAD 3
+
 bool match(char *str, int optimistic_thread) {
     int thread_count = optimistic_thread + 1;
     int thread_id;
@@ -56,18 +58,18 @@ bool match(char *str, int optimistic_thread) {
     {
         // Obtain thread number and thread count
         thread_id = omp_get_thread_num();
-        //Separate the string smartly(Master thread need a string 4x longer than optimistics threads
+        //Separate the string smartly(Master thread need a string 3x longer than optimistics threads
         // as they have to check for each starting state)
-        // e.g. For a string of length 14, master thread will read 8 characters and the others only 2
-        int part = thread_count + 3;
+        // e.g. For a string of length 12, master thread will read 6 characters and the others only 2
+        int part = thread_count + ACTION_PER_OP_THREAD - 1;
         int remaining, begin;
 
         if (thread_id == 0) { //Master
-            remaining = str_len * 4 / part;
+            remaining = str_len * ACTION_PER_OP_THREAD / part;
             printf("Master thread reading string of size %d\n", remaining);
             current_state = getNextState(STATE0, str, remaining);
         } else { //Other threads
-            begin = (str_len * (4 + thread_id - 1)) / part;
+            begin = (str_len * (ACTION_PER_OP_THREAD + thread_id - 1)) / part;
             remaining = str_len / part;
             if (thread_id == thread_count - 1) { // If this is the last thread
                 // Last thread need to finish the string
@@ -77,7 +79,6 @@ bool match(char *str, int optimistic_thread) {
             printf("Thread %d reading string of size %d starting at %d\n", thread_id, remaining, begin);
             std::map<State, State> map;
             char *thread_str = str + begin; //Get the string pointer
-            map[STATE0] = getNextState(STATE0, thread_str, remaining);
             map[STATE1] = getNextState(STATE1, thread_str, remaining);
             map[STATE2] = getNextState(STATE2, thread_str, remaining);
             map[STATE3] = getNextState(STATE3, thread_str, remaining);

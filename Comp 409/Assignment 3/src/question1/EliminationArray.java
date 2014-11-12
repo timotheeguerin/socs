@@ -28,16 +28,3 @@ class EliminationArray<T> {
         return (exchanger[slot].exchange(value, duration, TimeUnit.MILLISECONDS));
     }
 }
-//Thread 1
-// CAS(flag, <empty, null>, <"waiting", x>
-// Works
-
-//Thread 2
-// CAS(flag, <empty, null>, <"waiting", null>
-// fail
-// get flag value
-// CAS(flag, <"waiting", x>, <"busy", null>)
-
-//Thread 1
-//get flag value.
-// set flag value to empty

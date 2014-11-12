@@ -18,11 +18,8 @@ public class Main {
         engine.operationAmount = Integer.parseInt(args[2]);
         engine.timeoutFactor = Integer.parseInt(args[3]);
         engine.eliminationArrayCapacity = Integer.parseInt(args[4]);
-
         engine.run();
-
     }
-
 }
 
 class Engine {
@@ -79,7 +76,7 @@ class Engine {
                         addToQueue(stack.pop());
                         popCount++;
                     } catch (Exception ignore) {
-                        i--;
+//                        i--;
                     }
                 }
                 try {

@@ -22,53 +22,61 @@ State state2(char *string);
 
 State state3(char *string);
 
-State state4(char *string);
-
 State getNextState(State state, char *string, int remaining);
+
+void printThreadOutputs(std::vector<std::map<State, State>> &outputs);
+
+bool match(char *str, int optimistic_thread = 0);
+
+template<typename Functor>
+void benchmark(Functor func);
 
 int main(int argc, char *argv[]) {
     printf("Starting\n");
-    int thread_count, thread_id;
-    char *str = buildString();
-//    char *str = "aabcabdabdccabdcabdabdabcabdabdabcdabccc";
-    int str_len = (int) strlen(str);
-    std::vector<std::map<State, State>> outputs;
-    cout << "Will check: " << endl;
-//    printString(str);
-    cout << endl;
-    cout << "Length: " << strlen(str) << endl;
-    State current_state;
 
-    omp_set_num_threads(4);
-#pragma omp parallel
-    {
-        //Only the main thread resize
-        if (omp_get_thread_num() == 0) {
-            outputs.resize((unsigned long) omp_get_num_threads());
-        }
-    }
-    auto time_begin = chrono::high_resolution_clock::now();
-#pragma omp parallel private(thread_count, thread_id)
+    char *str = buildString();
+    cout << "Checking string of length: " << strlen(str) << endl;
+
+    auto func = [str]() {
+        cout << "Match: " << match(str, 3) << endl;
+    };
+    benchmark(func);
+    return 0;
+}
+
+bool match(char *str, int optimistic_thread) {
+    int thread_count = optimistic_thread + 1;
+    int thread_id;
+    int str_len = (int) strlen(str);
+    std::vector<std::map<State, State>> outputs((unsigned long) thread_count);
+    State current_state = STATE0;
+    omp_set_num_threads(thread_count);
+
+#pragma omp parallel private(thread_id)
     {
         // Obtain thread number and thread count
         thread_id = omp_get_thread_num();
-        thread_count = omp_get_num_threads();
-        int part = thread_count + 4;
-        int begin = (thread_id * str_len) / thread_count;
-        int end = ((thread_id + 1) * str_len) / thread_count;
-        int remaining = end - begin;
-        printf("Thread %d will take care of zone %d to %d\n", thread_id, begin, end);
+        //Separate the string smartly(Master thread need a string 4x longer than optimistics threads
+        // as they have to check for each starting state)
+        // e.g. For a string of length 14, master thread will read 8 characters and the others only 2
+        int part = thread_count + 3;
+        int remaining, begin;
 
-        /* Only master thread does this */
-        if (thread_id == 0) {
+        if (thread_id == 0) { //Master
             remaining = str_len * 4 / part;
+            printf("Master thread reading string of size %d\n", remaining);
             current_state = getNextState(STATE0, str, remaining);
         } else { //Other threads
-            remaining = str_len / part;
             begin = (str_len * (4 + thread_id - 1)) / part;
-            printf("Thread %d begin:  %d\n", thread_id, begin);
+            remaining = str_len / part;
+            if (thread_id == thread_count - 1) { // If this is the last thread
+                // Last thread need to finish the string
+                // If the string length is not divisible by part then it might skip some characters
+                remaining = str_len - begin;
+            }
+            printf("Thread %d reading string of size %d starting at %d\n", thread_id, remaining, begin);
             std::map<State, State> map;
-            char *thread_str = str + begin;
+            char *thread_str = str + begin; //Get the string pointer
             map[STATE0] = getNextState(STATE0, thread_str, remaining);
             map[STATE1] = getNextState(STATE1, thread_str, remaining);
             map[STATE2] = getNextState(STATE2, thread_str, remaining);
@@ -77,30 +85,17 @@ int main(int argc, char *argv[]) {
             outputs[thread_id] = map;
         }
     }
-    for (int i = 0; i != outputs.size(); ++i) {
-        cout << "ede" << endl;
-        printf("Thread %d:\n", i);
-        for (std::map<State, State>::const_iterator it = outputs[i].begin();
-             it != outputs[i].end(); ++it) {
-            std::cout << it->first << "=>" << it->second << std::endl;
-        }
-        std::cout << "------------------" << std::endl;
-    }
-//    cout << "Match: " << std::regex_match(str, std::regex("^(a+b+(c|d)+)+$")) << endl;
+    printThreadOutputs(outputs);
+
     for (int i = 1; i != outputs.size(); ++i) {
         std::cout << "Move: " << current_state << " => " << outputs[i][current_state] << std::endl;
         current_state = outputs[i][current_state];
         if (current_state == STATE4) {
-            std::cout << "Not a string" << std::endl;
-            return 0;
+            return false;
         }
     }
-    std::cout << "This string match" << std::endl;
-
-    auto time_end = chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_begin).count();
-    cout << "Time elapsed: " << elapsed << endl;
-    return 0;
+    std::cout << "====================================================" << std::endl;
+    return true;
 }
 
 State getNextState(State state, char *string, int remaining) {
@@ -171,4 +166,28 @@ State state3(char *string) {
     } else {
         return STATE4;
     }
+}
+
+void printThreadOutputs(std::vector<std::map<State, State>> &outputs) {
+    std::cout << "====================================================" << std::endl;
+    for (int i = 0; i != outputs.size(); ++i) {
+        if (i != 0) {
+            std::cout << "---------------------------------------------------" << std::endl;
+        }
+        printf("Thread %d:\n", i);
+        for (std::map<State, State>::const_iterator it = outputs[i].begin();
+             it != outputs[i].end(); ++it) {
+            std::cout << "\t" << it->first << " => " << it->second << std::endl;
+        }
+    }
+    std::cout << "====================================================" << std::endl;
+}
+
+template<typename Functor>
+void benchmark(Functor func) {
+    auto time_begin = chrono::high_resolution_clock::now();
+    func();
+    auto time_end = chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_begin).count();
+    cout << "Time elapsed: " << elapsed << endl;
 }

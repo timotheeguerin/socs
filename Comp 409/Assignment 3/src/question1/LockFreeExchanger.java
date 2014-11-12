@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
  * question1.LockFreeExchanger
- * Created by tim on --.
+ * Created by tim on 14-10-30.
  */
 public class LockFreeExchanger<T> {
     static final int EMPTY = 0, WAITING = 1, BUSY = 2;

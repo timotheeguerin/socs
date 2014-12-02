@@ -3,7 +3,7 @@
 
 /* Size of the string to match against.  A small size is used here for debugging; you will need
    a _much_ larger size for any performance testing . */
-#define STRINGSIZE 320000000
+#define STRINGSIZE 300000000
 
 /* Probability of repeating a character */
 #define PROB rand()%1000<197

@@ -6,8 +6,12 @@ Door(id) :: *[
 
 ]
 
-Button(floorNumber) :: *[
+FloorButton(floorNumber) :: *[
   persons?True -> elevator?floorNumber
+]
+
+ElevatorButton(floorNumber) :: *[
+persons?True -> elevator?floorNumber
 ]
 
 Elevator() :: (
@@ -79,4 +83,9 @@ Person (id) :: (
   ]
 )
 
-doors || persons || elevator || elevatorEngine || elevatorButtons || floorButtons
+
+Door(0) || Door(1) || Door(2) ||
+  ElevatorButton(0) || ElevatorButton(1) || ElevatorButton(2) ||
+  FloorButton(0) || FloorButton(1) || FloorButton(2)
+  || Elevator() || ElevatorEngine()
+  || Person(0) || Person(1) || ... || Person(n-1)

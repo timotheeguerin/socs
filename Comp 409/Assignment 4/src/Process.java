@@ -40,7 +40,7 @@ abstract class Process extends Thread {
 
                 Object message = MessagePool.getMessage((Process) sender, this);
                 if (message != null) {
-                    return new Pair(sender, message);
+                    return new Pair<>((Process) sender, message);
                 }
             }
             sleep(1);

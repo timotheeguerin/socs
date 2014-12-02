@@ -1,15 +1,12 @@
 import javafx.util.Pair;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Main
  * Created by tim on 14-12-01.
  */
 public class ElevatorSimulator {
-
-    private AtomicBoolean run = new AtomicBoolean(true);
 
     private static final int FLOOR_COUNT = 3;
 
@@ -26,10 +23,15 @@ public class ElevatorSimulator {
 
 
     public static void main(String[] args) {
-        new ElevatorSimulator(2);
+        if (args.length < 2) {
+            System.err.println("Error, expecting 2 arguments: n t");
+        }
+        int n = Integer.parseInt(args[0]);
+        int t = Integer.parseInt(args[1]);
+        new ElevatorSimulator(n, t);
     }
 
-    public ElevatorSimulator(int personCount) {
+    public ElevatorSimulator(int personCount, int passengerTripCount) {
 
         // Load, start and join all threads
         for (int i = 0; i < FLOOR_COUNT; i++) {
@@ -38,7 +40,7 @@ public class ElevatorSimulator {
             doors.add(new Door(i));
         }
         for (int i = 0; i < personCount; i++) {
-            persons.add(new Person(i));
+            persons.add(new Person(i, passengerTripCount));
         }
 
         elevator.start();
@@ -179,12 +181,12 @@ public class ElevatorSimulator {
     }
 
     class Person extends Process {
-        private static final int NUMBER_TRIP = 1;
         private int currentFloor = random.nextInt(FLOOR_COUNT);
         private int tripCount = 0;
 
-        public Person(int id) {
+        public Person(int id, int tripCount) {
             this.id = id;
+            this.tripCount = tripCount;
         }
 
         private void enterElevator() throws InterruptedException {
@@ -196,7 +198,7 @@ public class ElevatorSimulator {
         }
 
         public void loop() throws InterruptedException {
-            if (tripCount >= NUMBER_TRIP) {
+            if (tripCount == 0) {
                 throw new InterruptedException();
             }
             //Call the elevator by pressing the button
@@ -226,7 +228,7 @@ public class ElevatorSimulator {
 
             // Tell the elevator we have left
             sendLock(elevator, true);
-            tripCount++;
+            tripCount--;
         }
     }
 }

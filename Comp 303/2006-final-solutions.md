@@ -182,7 +182,7 @@ Calling `super.clone()` is not going to clone the sheep correctly as it will cop
 their pasture and require modifications to the system so that it is not possible to have cloned sheep in a
 flock. How would you solve that problem? Describe (in English) the changes you would make to the
 system to implement this requirement.**  
-We would need to add a `private` boolean field to know if a sheep is a clone or not. When we clone we can set this boolean to `true`.
+We would need to add a `private` boolean field initalized to false with a `public` getter `isClone()` to know if a sheep is a clone or not. When we clone we can set this boolean to `true`. Then when adding to a flock we can check if the sheep is clone and add it only if not.
 
 5. **In a different scenario (assume the system does not implement the solution for (4), the users of the
 system find it too inconvenient to allow multiple sheep with the same name in a flock. The system is thus

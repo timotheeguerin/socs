@@ -293,34 +293,48 @@ details of the Lock API. `8 points`**
   }
   ```
 
-  Solution 2(Using synchronized, cleaner and more efficient - no busy waiting):
-  ```java
-  class BoundedBuffer {
+  Solution 2(Using condition. No busy waiting):
+ ```java
+ class BoundedBuffer {
+    final Lock lock = new ReentrantLock();
+    final Condition notFull = lock.newCondition();
+    final Condition notEmpty = lock.newCondition();
     final Object[] aItems = new Object[100];
     int aPutIndex, aTakeIndex, aCount;
     
-    public synchronized void put(Object x) throws InterruptedException {
-      while (aCount == aItems.length) {
-        wait();
+    public void put(Object x) throws InterruptedException {
+      lock.lock();
+      try {
+        while (aCount == aItems.length) {
+         notFull.await();
+        }
+        aItems[aPutIndex] = x;
+        if (++aPutIndex == aItems.length) aPutIndex = 0;
+        ++aCount;
+        notEmpty.signal();
+      } finally {
+        lock.unlock();
       }
-      aItems[aPutIndex] = x;
-      if (++aPutIndex == aItems.length) aPutIndex = 0;
-      notifyAll(); //Notify waiting thread they can try again
-      ++aCount;
     }
     
-    public synchronized Object take() throws InterruptedException {
-      while (aCount == 0) {
-        wait();
+    public Object take() throws InterruptedException {
+      lock.lock();
+      try {
+        while (aCount == 0)  {
+          notEmpty.await();
+          
+        }
+        Object x = aItems[aTakeIndex];
+        if (++aTakeIndex == aItems.length) aTakeIndex = 0;
+        --aCount;
+        notFull.signal();
+        return x;
+      } finally {
+        lock.unlock();
       }
-      Object x = aItems[aTakeIndex];
-      if (++aTakeIndex == aItems.length) aTakeIndex = 0;
-      --aCount;
-      notifyAll(); //Notify waiting thread they can try again
-      return x;
     }
   }
-  ```
+ ```
 
 # Question 7 `10 points`
 You are asked to test the `Math.abs(int)` function. The description of this function is the following:  
